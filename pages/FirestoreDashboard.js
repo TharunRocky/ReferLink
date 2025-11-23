@@ -27,7 +27,7 @@ async function estimateCollectionSize(collectionRef) {
 export default function FirestoreStorageDashboard() {
   const [usage, setUsage] = useState({});
   const [total, setTotal] = useState(0);
-  const collections = ["messages", "users", "jobRequests"]; // Add your top-level collections
+  const collections = ["messages", "jobRequests","jobOpenings"]; // Add your top-level collections
 
   useEffect(() => {
     async function calculateUsage() {
