@@ -1,51 +1,29 @@
 {
     "name" : "ReferLink",
-    "short_name":"Job Search",
+    "short_name":"ReferLink",
     "description": "Your trusted network for job referrals",
     "start_url":"/",
     "display" : "standalone",
-    "background_color": "#e8f0ff",
-    "theme_color": "#0b1220",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
     "lang": "en-US",
     "orientation":" portrait-primary",
     "icons": [
         {
-            "src": "/icons/icon-192x192.png",
+            "src": "/icons/logo.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
-            "src" : "/icons/icon-512x512.png",
+            "src" : "/icons/logo.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
 
     ],
     "shortcuts": [
-        {
-            "name": "Job Requests",
-            "short_name": "Requests",
-            "url": "/?tab=requests",
-            "icons": [
-                {
-                "src": "/icons/icon-192x192.png",
-                "sizes": "96x96",
-                "type": "image/png"
-                }
-            ]
-        },
-        {
-            "name": "Job Openings",
-            "short_name": "Openings",
-            "url": "/?tab=openings",
-            "icons": [
-                {
-                "src": "/icons/icon-192x192.png",
-                "sizes": "96x96",
-                "type": "image/png"
-                }
-            ]
-        },
         {
             "name": "My Posts",
             "short_name": "Posts",

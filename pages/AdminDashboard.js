@@ -113,7 +113,7 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
         </Card>
       </div>
 
-      <Tabs defaultValue="users" className="w-full">
+      <Tabs defaultValue="pending-users" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-6">
           {/* <TabsTrigger value="users" data-testid="admin-users-tab">Users</TabsTrigger> */}
           <TabsTrigger value="pending-users">Pending Users ({pendingUsers?.length ?? 0})</TabsTrigger>

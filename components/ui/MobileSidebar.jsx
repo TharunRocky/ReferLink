@@ -119,6 +119,19 @@ export default function MobileSidebar({ session, ChangeTab }) {
               Admin Panel
             </Button>
           )}
+          {session.user.role === "ADMIN" && (
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => {
+                ChangeTab("firestore");
+                setOpen(false);
+              }}
+            >
+              <LayoutDashboard className="h-4 w-4 mr-2" />
+              Firestore
+            </Button>
+          )}
 
           <DropdownMenuSeparator />
 
@@ -147,6 +160,23 @@ export default function MobileSidebar({ session, ChangeTab }) {
           >
             <FileText className="h-4 w-4 mr-2" />
             Post Job Opening
+          </Button>
+
+          <DropdownMenuSeparator />
+
+          {/* Post Actions */}
+          <p className="font-semibold text-sm text-gray-500">Discussion Rooms</p>
+
+          <Button
+            variant="ghost"
+            className="w-full justify-start"
+            onClick={() => {
+              ChangeTab("generalChat");
+              setOpen(false);
+            }}
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            General Chat
           </Button>
 
           <DropdownMenuSeparator />
@@ -185,25 +215,6 @@ export default function MobileSidebar({ session, ChangeTab }) {
           </div>
 
           <DropdownMenuSeparator />
-
-          {/* User Info */}
-          <div className="border rounded-md p-3">
-            <p className="font-medium">{session.user.name}</p>
-            <p className="text-sm text-gray-500">{session.user.email}</p>
-            {session.user.role === "ADMIN" && (
-              <Badge className="mt-1">Admin</Badge>
-            )}
-          </div>
-
-          {/* Logout */}
-          <Button
-            className="w-full justify-start"
-            variant="destructive"
-            onClick={() => signOut()}
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Logout
-          </Button>
         </div>
       </SheetContent>
     </Sheet>

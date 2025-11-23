@@ -21,6 +21,9 @@ import PostJobOpeningPage from '@/pages/PostJobOpeningPage';
 import PostJobRequestPage from '@/pages/PostJobRequestPage';
 import useJobRequests from '@/hooks/useJobRequests';
 import useJobsOpenings from '@/hooks/useJobsOpenings';
+import GeneralChat from '@/pages/GeneralChat';
+import useChats from '@/hooks/useChats';
+import FirestoreStorageDashboard from '@/pages/FirestoreDashboard';
 
 export default function App() {
   const { data: session, status } = useSession();
@@ -48,6 +51,7 @@ export default function App() {
     
   const jobOpenings = useJobsOpenings();
   const jobRequests = useJobRequests();
+  const messages = useChats();
 
    const fetchAnalytics = async () => {
     setLoading(true);
@@ -140,11 +144,17 @@ export default function App() {
       {currentTab === "admin" && (
         <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} analytics={analytics} refreshAnalytics={fetchAnalytics} pendingUsers={pendingUsers} refreshPendingUsers={setPendingUsers} loading={loading}/>
       )}
+      {currentTab === "firestore" && (
+        <FirestoreStorageDashboard />
+      )}
       {currentTab === "postOpening" && (
        <PostJobOpeningPage session={session} ChangeTab={setCurrentTab} />
       )}
       {currentTab === "postRequest" && (
         <PostJobRequestPage session={session} ChangeTab={setCurrentTab} />
+      )}
+      {currentTab === "generalChat" && (
+        <GeneralChat session={session} messages={messages}/>
       )}
     </div>
   );

@@ -37,7 +37,7 @@ export default function MyPostsPage({ session ,  jobRequests, jobOpenings}) {
         <p className="text-gray-600">Manage your job requests and openings</p>
       </div>
 
-      <Tabs defaultValue="openings" className="w-full">
+      <Tabs defaultValue="requests" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-6">
           <TabsTrigger value="requests" data-testid="my-requests-tab">
             My Job Requests ({(jobRequests?.filter(job => job.userFullName === session.user.name) ?? []).length})
