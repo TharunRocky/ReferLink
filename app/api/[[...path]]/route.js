@@ -44,7 +44,7 @@ export async function POST(request, { params }) {
 
     // REGISTER (Join Request)
     if (path === 'register') {
-      const { fullName, email, password, linkedinProfile, techStack, bio } = body;
+      const { fullName, email, password, linkedinProfile, company, bio } = body;
       
       if (!fullName || !email || !password || !techStack) {
         return Response.json({ error: 'Missing required fields' }, { status: 400 });
@@ -65,7 +65,7 @@ export async function POST(request, { params }) {
         email,
         password: hashedPassword,
         linkedinProfile: linkedinProfile || '',
-        techStack,
+        company,
         bio: bio || '',
         role: 'USER',
         status: 'PENDING',
