@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#F97316"/>
+        <meta name="theme-color" content="#ffffff"/>
     <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="application-name" content="ReferLink"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>

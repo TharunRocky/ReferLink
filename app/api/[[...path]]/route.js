@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { subBusinessDays } from 'date-fns';
 import { Dumbbell } from 'lucide-react';
-import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest } from '@/lib/firebase/firebaseClient';
+import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest, postMessage} from '@/lib/firebase/firebaseClient';
 
 
 const uri = process.env.MONGO_URL;
@@ -90,6 +90,32 @@ export async function POST(request, { params }) {
         user: { id: userId, email, fullName, status: 'PENDING' }
       }, { status: 201 });
     }
+
+
+    if(path === 'messages'){
+
+      try {
+        const { room, username, message, timestamp } = body;
+
+        const messageObj = {
+          username,
+          message,
+          timestamp: timestamp ? new Date(timestamp) : new Date()
+        };
+        await postMessage(messageObj);
+        const doc = {
+          ...messageObj,
+          timestamp: messageObj.timestamp.toISOString()
+        };
+
+        // await db.collection("messages").insertOne(doc);
+        return Response.json(messageObj);
+      } catch (error) {
+        console.error(error);
+        return new Response("Error creating message", { status: 500 });
+      }
+    }
+
 
     // JOB REQUESTS
     if (path === 'job-requests') {
@@ -340,6 +366,34 @@ export async function GET(request, { params }) {
       }, {status : 200});
       // return Response.json({"message":"Success"},{status:200})
     }
+
+    // if(path === 'messages'){
+    //     const room = searchParams.get("room");
+    //   try {
+    //     let messages = await db
+    //       .collection("messages")
+    //       .find({ room })
+    //       .project({ _id: 0 })
+    //       .limit(1000)
+    //       .toArray();
+    //     // Convert timestamp strings → Date instances
+    //     messages = messages.map((msg) => {
+    //       if (typeof msg.timestamp === "string") {
+    //         msg.timestamp = new Date(msg.timestamp);
+    //       }
+    //       return msg;
+    //     });
+
+    //     // Sort by timestamp
+    //     messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    //    // console.log(messages);
+
+    //     return Response.json(messages);
+    //   } catch (error) {
+    //     console.error(error);
+    //     return new Response("Failed to fetch messages", { status: 500 });
+    //   }
+    // }
 
 
     return Response.json({ error: 'Not found' }, { status: 404 });

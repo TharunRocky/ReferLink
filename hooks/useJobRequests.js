@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, query, orderBy, onSnapshot, doc, enableIndexedDbPersistence } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot, doc } from "firebase/firestore";
 import {db} from "@/lib/firebase/firebase";
 
 

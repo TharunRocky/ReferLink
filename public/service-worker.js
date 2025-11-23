@@ -1,6 +1,6 @@
 
-const CACHE_NAME = 'site-static-v15';
-const API_CACHE = 'api-cache-v15';
+const CACHE_NAME = 'site-static-v54';
+const API_CACHE = 'api-cache-v54';
 // const NETWORK_TIMEOUT = 3000;
 const assets =[
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
@@ -8,6 +8,8 @@ const assets =[
     '/icons/icon-512x512.png',
     '/manifest.json',
     '/offline.html',
+    '/hero.jpg',
+    'icons/logo.png',
 ];
 
 
@@ -40,39 +42,50 @@ self.addEventListener("fetch", (event) => {
   // 🔹 Skip caching for Firestore (or other APIs)
   if (
     requestUrl.origin.includes("firestore.googleapis.com") || 
-    requestUrl.pathname.startsWith("/__/")
+    requestUrl.pathname.startsWith("/__/") 
   ) {
     return;
   }
-  if (requestUrl.pathname.startsWith("/api")) {
-    return event.respondWith(fetch(event.request));
-  }
-  if (event.request.method !== "GET") return;
+  if(requestUrl.pathname.startsWith("/_next/") || assets.includes(requestUrl.pathname)) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            // Only cache valid responses
+            if (
+              networkResponse &&
+              networkResponse.status === 200 &&
+              networkResponse.type === "basic"
+            ) {
+              const responseClone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseClone);
+              });
+            }
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          // Only cache valid responses
-          if (
-            networkResponse &&
-            networkResponse.status === 200 &&
-            networkResponse.type === "basic"
-          ) {
-            const responseClone = networkResponse.clone();
-            caches.open(API_CACHE).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-          }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse); // fallback if offline
 
-          return networkResponse;
+        // Return cached first, then update
+        return cachedResponse || fetchPromise;
+      })
+      .catch(() => {
+          return caches.match('/offline.html');
         })
-        .catch(() => cachedResponse); // fallback if offline
+    );
+  }
+  else {
+  event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          console.log('API request failed, serving offline fallback:', requestUrl.pathname);
+          return caches.match('/offline.html');
+        })
+    );
+    return;
+}
 
-      // Return cached first, then update
-      return cachedResponse || fetchPromise;
-    })
-  );
 });
 
 
@@ -80,4 +93,9 @@ self.addEventListener("message",(event)=> {
     if(event.data && event.data.type === "SKIP_WAITING"){
         self.skipWaiting();
     }
-});
+  //   if (event.data && event.data.type === 'CLEAR_SESSION') {
+  //   caches.delete(API_CACHE).then(() => {
+  //     console.log('Session cache cleared.');
+  //   });
+  // }
+}); 

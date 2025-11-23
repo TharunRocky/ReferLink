@@ -113,6 +113,21 @@ export default function Navbar({ session,status,ChangeTab}) {
                   </Button>
                 </p>
               )}
+              {session.user.role === "ADMIN" && (
+                <p >
+                  <Button
+                    onClick = {() => {
+                        setTab("firestore")
+                        ChangeTab("firestore")
+                    }}
+                    variant={tab === "firestore" ? "default" : "ghost"}
+                    data-testid="nav-admin-link"
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Firestore
+                  </Button>
+                </p>
+              )}
             </div>
           </div>
 
@@ -125,7 +140,7 @@ export default function Navbar({ session,status,ChangeTab}) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <p onClick = {() => {
+                <div onClick = {() => {
                       setTab("home")
                       ChangeTab("postRequest")
                     }}>
@@ -133,8 +148,8 @@ export default function Navbar({ session,status,ChangeTab}) {
                     <FileText className="h-4 w-4 mr-2" />
                     Post Job Request
                   </DropdownMenuItem>
-                </p>
-                <p 
+                </div>
+                <div 
                     onClick = {() => {
                         setTab("home")
                         ChangeTab("postOpening")
@@ -143,7 +158,17 @@ export default function Navbar({ session,status,ChangeTab}) {
                     <FileText className="h-4 w-4 mr-2" />
                     Post Job Opening
                   </DropdownMenuItem>
-                </p>
+                </div>
+                <div 
+                    onClick = {() => {
+                        setTab("")
+                        ChangeTab("generalChat")
+                    }}>
+                  <DropdownMenuItem data-testid="nav-general-chat-link">
+                    <FileText className="h-4 w-4 mr-2" />
+                    GeneralChat
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
             </div>

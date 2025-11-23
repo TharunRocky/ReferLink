@@ -6,7 +6,7 @@ const useBeforeInstallPrompt = () => {
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault(); // Prevent the default prompt
+      // e.preventDefault(); // Prevent the default prompt
       setDeferredPrompt(e); // Save the event for later use
       setShowInstallButton(true); // Show the install button
     };

@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Mail, Lock, Twitter, Github, Facebook } from 'lucide-react';
 import { toast } from 'sonner';
+import InstallAppButton from '@/pages/InstallAppButton';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function LoginPage() {
    <div className="min-h-screen bg-indigo-50 flex items-center justify-center">
 
   {/* DESKTOP (2-column layout) */}
-  <div className="hidden md:grid w-full max-w-6xl grid-cols-2 gap-10 px-10 py-16 h-screen overflow-hidden">
+  <div className="hidden md:grid w-full max-w-6xl grid-cols-2 gap-10 px-10 py-16">
 
     {/* LEFT SIDE – Welcome */}
     <div className="flex flex-col justify-center h-full sticky top-0">
@@ -106,7 +107,7 @@ export default function LoginPage() {
     </div>
 
     {/* RIGHT SIDE – Login Card */}
-    <div className="w-full overflow-y-auto">
+    <div className="w-full">
       <Card className="bg-white shadow-md rounded-2xl">
         <CardHeader className="px-8 pt-8">
           <CardTitle className="text-xl font-semibold text-gray-900">
@@ -154,13 +155,13 @@ export default function LoginPage() {
 
                 <div className="flex items-center justify-between text-sm text-gray-700">
                   <label className="flex items-center gap-2">
-                    <input
+                    {/* <input
                       type="checkbox"
                       checked={loginData.remember}
                       onChange={(e) => setLoginData({ ...loginData, remember: e.target.checked })}
                       className="h-4 w-4"
                     />
-                    Remember me
+                    Remember me */}
                   </label>
                   <a href="#" className="text-orange-600 hover:underline">Forgot password?</a>
                 </div>
@@ -282,13 +283,13 @@ export default function LoginPage() {
 
                 <div className="flex items-center justify-between text-sm text-gray-700">
                   <label className="flex items-center gap-2">
-                    <input
+                    {/* <input
                       type="checkbox"
                       checked={loginData.remember}
                       onChange={(e) => setLoginData({ ...loginData, remember: e.target.checked })}
                       className="h-4 w-4"
                     />
-                    Remember me
+                    Remember me */}
                   </label>
                   <a className="text-orange-600 hover:underline" href="#">Forgot?</a>
                 </div>
@@ -348,7 +349,7 @@ export default function LoginPage() {
                 </div>
 
                 <Button className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white rounded-md">
-                  {isLoading ? "Submitting…" : "Request to join"}
+                  {isLoading ? "Submitting…" : "Sign Up"}
                 </Button>
               </form>
             </TabsContent>
@@ -356,10 +357,7 @@ export default function LoginPage() {
           </Tabs>
         </CardContent>
       </Card>
-
-      <p className="text-xs text-gray-500 mt-4 text-center">
-        Login at least once a week to keep your account active.
-      </p>
+      <InstallAppButton/>
     </div>
     </div>
   </div>
