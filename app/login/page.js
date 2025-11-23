@@ -203,9 +203,9 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <Label>Tech stack / Role</Label>
+                  <Label>Company</Label>
                   <Input
-                    placeholder="e.g., React, Product Manager"
+                    placeholder="e.g., Infosys, Virtusa"
                     value={signupData.techStack}
                     onChange={(e) => setSignupData({ ...signupData, techStack: e.target.value })}
                   />
