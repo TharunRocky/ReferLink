@@ -208,6 +208,16 @@ export default function Navbar({ session,status,ChangeTab}) {
                     GeneralChat
                   </DropdownMenuItem>
                 </div>
+                <div 
+                    onClick = {() => {
+                        setTab("")
+                        ChangeTab("profile")
+                    }}>
+                  <DropdownMenuItem data-testid="nav-general-chat-link">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Profile
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
             </div>

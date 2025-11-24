@@ -430,11 +430,11 @@ export async function PUT(request, { params }) {
         return Response.json({ error: 'Unauthorized' }, { status: 401 });
       }
 
-      const { fullName, linkedinProfile, techStack, bio } = body;
+      const { fullName, linkedinProfile, company, bio } = body;
       const updates = {};
       if (fullName) updates.fullName = fullName;
       if (linkedinProfile !== undefined) updates.linkedinProfile = linkedinProfile;
-      if (techStack) updates.techStack = techStack;
+      if (company) updates.company = company;
       if (bio !== undefined) updates.bio = bio;
 
       await db.collection('users').updateOne(
