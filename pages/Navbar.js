@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Plus, LayoutDashboard, FileText, User,LogOut } from "lucide-react";
+import { Bell, Plus, LayoutDashboard, FileText, User,LogOut, Key, Save } from "lucide-react";
 import { toast } from "sonner";
 import { signOut } from "next-auth/react";
 import MobileSidebar from "@/components/ui/MobileSidebar";
@@ -23,6 +24,10 @@ export default function Navbar({ session,status,ChangeTab}) {
   if(!session) return null;
   const [notifications, setNotifications] = useState([]);
   const [tab, setTab] = useState("home");
+  const [changing, setChanging] = useState(false);
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
     useEffect(() => {
         fetchNotifications();
@@ -35,6 +40,40 @@ export default function Navbar({ session,status,ChangeTab}) {
       setNotifications(data);
     } catch (error) {
       console.error('Error fetching notifications:', error);
+    }
+  };
+
+  
+  const handlePasswordSave = async () => {
+    setLoading(true);
+    setMessage("");
+    
+    if (!password){
+      setMessage("Please Enter password");
+      setLoading(false);
+      return;
+    }
+    if(password.length < 8){
+      setMessage("Password must be atleast 8 characters");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/change-password", {
+        method: "POST",
+        body: JSON.stringify({ password }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!res.ok) throw new Error("Failed to update password");
+      toast.success("Password updated!");
+      setPassword("");
+      setChanging(false);
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,6 +208,16 @@ export default function Navbar({ session,status,ChangeTab}) {
                     GeneralChat
                   </DropdownMenuItem>
                 </div>
+                <div 
+                    onClick = {() => {
+                        setTab("")
+                        ChangeTab("profile")
+                    }}>
+                  <DropdownMenuItem data-testid="nav-general-chat-link">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Profile
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
             </div>
@@ -245,6 +294,45 @@ export default function Navbar({ session,status,ChangeTab}) {
                     <Badge className="mt-1">Admin</Badge>
                   )}
                 </div>
+
+                   <DropdownMenuSeparator />
+            {!changing && (
+              <DropdownMenuItem  onSelect={(e) => e.preventDefault()} onClick={() => setChanging(true)}>
+                <Key className="h-4 w-4 mr-2" />
+                Change Password
+              </DropdownMenuItem>
+            )}
+
+            {changing && (
+          <div className="px-3 py-2 space-y-2">
+            <Input
+              type="password"
+              placeholder="New password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <div className="flex justify-between gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setChanging(false)}
+              >
+                Cancel
+              </Button>
+
+              <Button size="sm" onClick={handlePasswordSave} disabled={loading}>
+                <Save className="h-4 w-4 mr-2" />
+                Save
+              </Button>
+            </div>
+
+            {message && (
+              <p className="text-xs text-green-600">{message}</p>
+            )}
+          </div>
+        )}
+                
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut} data-testid="nav-logout-button">
                   <LogOut className="h-4 w-4 mr-2" />

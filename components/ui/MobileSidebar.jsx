@@ -181,7 +181,7 @@ export default function MobileSidebar({ session, ChangeTab }) {
 
           <DropdownMenuSeparator />
 
-          {/* Notifications */}
+          {/* Notifications
           <div className="flex items-center justify-between">
             <p className="font-semibold text-sm">Notifications</p>
             {unreadCount > 0 && (
@@ -212,11 +212,28 @@ export default function MobileSidebar({ session, ChangeTab }) {
                 </div>
               ))
             )}
-          </div>
+          </div> */}
 
           <DropdownMenuSeparator />
+
+          {/* Profile Button at Bottom */}
+          <div className="mt-6">
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => {
+                ChangeTab("profile");
+                setOpen(false);
+              }}
+            >
+              <User className="h-4 w-4 mr-2" />
+              My Profile
+            </Button>
+          </div>
+
         </div>
       </SheetContent>
     </Sheet>
+
   );
 }

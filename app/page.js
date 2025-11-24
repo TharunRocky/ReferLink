@@ -24,6 +24,7 @@ import useJobsOpenings from '@/hooks/useJobsOpenings';
 import GeneralChat from '@/pages/GeneralChat';
 import useChats from '@/hooks/useChats';
 import FirestoreStorageDashboard from '@/pages/FirestoreDashboard';
+import ProfileUpdateCard from '@/pages/ProfileUpdate';
 
 export default function App() {
   const { data: session, status } = useSession();
@@ -32,6 +33,7 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState("home");
   const [analytics, setAnalytics] = useState({});
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState([]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -42,6 +44,7 @@ export default function App() {
         fetchPendingUsers();
         fetchAnalytics();
       }
+       fetchUser();
     }
     const tab = new URLSearchParams(window.location.search).get("tab");
     if (tab) {
@@ -52,6 +55,33 @@ export default function App() {
   const jobOpenings = useJobsOpenings();
   const jobRequests = useJobRequests();
   const messages = useChats();
+
+    const fetchUser = async()=> {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/profile");
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        setProfile(normalizeUserData(data));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function normalizeUserData(user) {
+    return {
+      id: user.id || "",
+      fullName: user.fullName || "",
+      email: user.email || "",
+      linkedinProfile: user.linkedinProfile || "",
+      company: user.company || "",
+      bio: user.bio || "",
+      image: "/icons/logo.png",
+    };
+    }
+
 
    const fetchAnalytics = async () => {
     setLoading(true);
@@ -155,6 +185,9 @@ export default function App() {
       )}
       {currentTab === "generalChat" && (
         <GeneralChat session={session} messages={messages}/>
+      )}
+      {currentTab === "profile" && (
+        <ProfileUpdateCard session={session} profile={profile} setProfile={setProfile}/>
       )}
     </div>
   );
