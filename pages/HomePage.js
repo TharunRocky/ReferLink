@@ -13,7 +13,7 @@ import { toast } from "sonner";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function HomePage({ session, jobRequests, jobOpenings}) {
+export default function HomePage({ session, jobRequests, jobOpenings, ChangeTab, ChangeProfile}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -153,6 +153,18 @@ export default function HomePage({ session, jobRequests, jobOpenings}) {
                         </Badge>
                       ))}
                     </div>
+                    <div className="mt-4 flex justify-end">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        ChangeTab("postProfile")
+                        ChangeProfile(job.email)}}
+                      data-testid={`view-profile-${job.id}`}
+                    >
+                      View Profile
+                    </Button>
+                  </div>
+
                   </CardContent>
                 </Card>
               ))}
@@ -215,6 +227,17 @@ export default function HomePage({ session, jobRequests, jobOpenings}) {
                         </Badge>
                       ))}
                     </div>
+                    <div className="mt-4 flex justify-end">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        ChangeTab("postProfile")
+                        ChangeProfile(job.email)}}
+                      data-testid={`view-profile-${job.id}`}
+                    >
+                      View Profile
+                    </Button>
+                  </div>
                   </CardContent>
                 </Card>
               ))}

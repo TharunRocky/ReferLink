@@ -34,6 +34,7 @@ export default function App() {
   const [analytics, setAnalytics] = useState({});
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState([]);
+  const [postUser, setPostUser] = useState("");
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -59,7 +60,7 @@ export default function App() {
     const fetchUser = async()=> {
       setLoading(true);
       try {
-        const res = await fetch("/api/profile");
+        const res = await fetch(`/api/profile?user=${session.user.email}`);
         if (!res.ok) throw new Error("Failed to fetch user");
         const data = await res.json();
         setProfile(normalizeUserData(data));
@@ -169,7 +170,7 @@ export default function App() {
         <MyPostsPage  session={session} jobRequests={jobRequests} jobOpenings={jobOpenings}/>
       )}
       {currentTab === "home" && (
-        <HomePage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} />
+        <HomePage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} ChangeTab={setCurrentTab} ChangeProfile={setPostUser}/>
       )}
       {currentTab === "admin" && (
         <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} analytics={analytics} refreshAnalytics={fetchAnalytics} pendingUsers={pendingUsers} refreshPendingUsers={setPendingUsers} loading={loading}/>
@@ -178,16 +179,19 @@ export default function App() {
         <FirestoreStorageDashboard />
       )}
       {currentTab === "postOpening" && (
-       <PostJobOpeningPage session={session} ChangeTab={setCurrentTab} />
+       <PostJobOpeningPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
       )}
       {currentTab === "postRequest" && (
-        <PostJobRequestPage session={session} ChangeTab={setCurrentTab} />
+        <PostJobRequestPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
       )}
       {currentTab === "generalChat" && (
         <GeneralChat session={session} messages={messages}/>
       )}
       {currentTab === "profile" && (
-        <ProfileUpdateCard session={session} profile={profile} setProfile={setProfile}/>
+        <ProfileUpdateCard session={session} userProfile={profile} setUserProfile={setProfile}/>
+      )}
+      {currentTab === "postProfile" && (
+        <ProfileUpdateCard session={session} postUser={postUser}/>
       )}
     </div>
   );

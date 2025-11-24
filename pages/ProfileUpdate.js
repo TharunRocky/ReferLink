@@ -5,11 +5,44 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MessageSquare,Linkedin, Edit } from "lucide-react";
 
-export default function ProfileUpdateCard({session, profile, setProfile}) {
+export default function ProfileUpdateCard({session, userProfile, setUserProfile,postUser}) {
     if(!session) return null;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [profile,setProfile] = useState([]);
+  useEffect(() => {
+    console.log(userProfile);
+    if(userProfile) setProfile(userProfile);
+    else{
+      if(postUser !== "") setProfile(fetchUser(postUser));
+    }
+  },[])
+  
+     const fetchUser = async(email)=> {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/profile?user=${email}`);
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        setProfile(normalizeUserData(data));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
 
+    function normalizeUserData(user) {
+    return {
+      id: user.id || "",
+      fullName: user.fullName || "",
+      email: user.email || "",
+      linkedinProfile: user.linkedinProfile || "",
+      company: user.company || "",
+      bio: user.bio || "",
+      image: "/icons/logo.png",
+    };
+    }
 
   function handleChange(e) {
     const { name, value } = e.target;
