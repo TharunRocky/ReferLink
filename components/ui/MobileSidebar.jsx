@@ -214,22 +214,24 @@ export default function MobileSidebar({ session, ChangeTab }) {
             )}
           </div> */}
 
-        </div>
-        {/* Bottom Profile Button */}
-      <div className="absolute bottom-4 left-0 w-full px-4">
-        <Button
-          variant="ghost"
-          className="w-full justify-start"
-          onClick={() => {
-            ChangeTab("profile");
-            setOpen(false);
-          }}
-        >
-          <User className="h-4 w-4 mr-2" />
-          My Profile
-        </Button>
-      </div>
+          <DropdownMenuSeparator />
 
+          {/* Profile Button at Bottom */}
+          <div className="mt-6">
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => {
+                ChangeTab("profile");
+                setOpen(false);
+              }}
+            >
+              <User className="h-4 w-4 mr-2" />
+              My Profile
+            </Button>
+          </div>
+
+        </div>
       </SheetContent>
     </Sheet>
 

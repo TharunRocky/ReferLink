@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare,Linkedin, Edit } from "lucide-react";
 
 export default function ProfileUpdateCard({session, profile, setProfile}) {
+    if(!session) return null;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
