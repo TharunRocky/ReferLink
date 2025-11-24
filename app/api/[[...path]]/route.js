@@ -291,9 +291,18 @@ export async function GET(request, { params }) {
       if (!currentUser) {
         return Response.json({ error: 'Unauthorized' }, { status: 401 });
       }
-
-      const { password, ...userWithoutPassword } = currentUser;
+      const postUser = searchParams.get('user');
+      if(!postUser){
+        const {password, ...userWithoutPassword } = currentUser;
       return Response.json(userWithoutPassword, { status: 200 });
+      }
+      
+        const tempUser = await db.collection('users').findOne({email: postUser});
+        const {password, ...userWithoutPassword } = tempUser;
+         return Response.json(userWithoutPassword, { status: 200 });
+      
+      
+
     }
 
       //MARK INDIVIDUAL NOTIFICATION AS READ

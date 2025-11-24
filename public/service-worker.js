@@ -1,6 +1,6 @@
 
-const CACHE_NAME = 'site-static-v57';
-const API_CACHE = 'api-cache-v57';
+const CACHE_NAME = 'site-static-v1';
+const API_CACHE = 'api-cache-v1';
 // const NETWORK_TIMEOUT = 3000;
 const assets =[
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
@@ -11,6 +11,10 @@ const assets =[
     '/hero.jpg',
     'icons/logo.png',
 ];
+
+const apiData = [
+  '/api/profile'
+]
 
 
 self.addEventListener("install", (event) => {
@@ -46,7 +50,7 @@ self.addEventListener("fetch", (event) => {
   ) {
     return;
   }
-  if(requestUrl.pathname.startsWith("/_next/") || assets.includes(requestUrl.pathname)) {
+  if(requestUrl.pathname.startsWith("/_next/") || assets.includes(requestUrl.pathname) || apiData.includes(requestUrl.pathname)) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         const fetchPromise = fetch(event.request)
