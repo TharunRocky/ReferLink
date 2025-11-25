@@ -28,6 +28,7 @@ export default function Navbar({ session,status,ChangeTab}) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [notifOpen, setNotifOpen] =useState(false);
 
     useEffect(() => {
         fetchNotifications();
@@ -224,7 +225,7 @@ export default function Navbar({ session,status,ChangeTab}) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative" data-testid="nav-notifications-menu">
+                <Button variant="ghost" size="icon" className="relative" data-testid="nav-notifications-menu" onClick={()=> setNotifOpen(true)}>
                   <Bell className="h-5 w-5" />
                   {notifications && (notifications.filter(n => !n.read)?.length ?? 0 ) > 0 && (
                     <Badge
@@ -236,7 +237,7 @@ export default function Navbar({ session,status,ChangeTab}) {
                   )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
+              {/* <DropdownMenuContent align="end" className="w-80">
                 <div className="flex items-center justify-between px-2 py-2">
                   <p className="font-semibold">Notifications</p>
                   {notifications && notifications.filter(n => !n.read).length > 0 && (
@@ -277,7 +278,43 @@ export default function Navbar({ session,status,ChangeTab}) {
                     ))
                   )}
                 </div>
-              </DropdownMenuContent>
+              </DropdownMenuContent> */}
+              {notifOpen && (
+                <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setNotifOpen(false)}>
+                <div
+                className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-lg p-5 max-h-[80vh] overflow-y-auto animate-slideUp"
+                onClick={(e) => e.stopPropagation()}
+                >
+                <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+
+
+                <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold">Notifications</h2>
+                {notifications.filter(n => !n.read).length > 0 && (
+                <Button size="sm" variant="ghost" onClick={markAllAsRead}>Mark all as read</Button>
+                )}
+                </div>
+
+
+                <div className="space-y-3">
+                {notifications.length === 0 ? (
+                <p className="text-center text-gray-500 py-6">No notifications</p>
+                ) : (
+                notifications.map((n) => (
+                <div
+                key={n.id}
+                className={`p-3 rounded-lg border cursor-pointer ${!n.read ? "bg-blue-50 border-blue-200" : "bg-white"}`}
+                onClick={() => !n.read && markAsRead(n.id)}
+                >
+                <p className="text-sm">{n.message}</p>
+                <p className="text-xs text-gray-500 mt-1">{new Date(n.createdAt).toLocaleString()}</p>
+                </div>
+                ))
+                )}
+                </div>
+                </div>
+                </div>
+                )}
             </DropdownMenu>
 
             <DropdownMenu>
