@@ -35,6 +35,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState([]);
   const [postUser, setPostUser] = useState("");
+   const [issues,setIssues]= useState([]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -44,6 +45,7 @@ export default function App() {
       if(session.user.role === 'ADMIN'){
         fetchPendingUsers();
         fetchAnalytics();
+        fetchIssues();
       }
        fetchUser();
     }
@@ -97,6 +99,19 @@ export default function App() {
     }
   };
 
+    const fetchIssues = async() => {
+      setLoading(true);
+      try{
+        const res = await fetch('api/admin/issues');
+        const data = await res.json();
+        setIssues(data);
+      }catch(error){
+        console.log(error);
+        toast.error('Failed to fetch issues');
+      } finally {
+        setLoading(false);
+      }
+    }
 
   const fetchPendingUsers = async () => {
     setLoading(true);
@@ -173,7 +188,7 @@ export default function App() {
         <HomePage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} ChangeTab={setCurrentTab} ChangeProfile={setPostUser}/>
       )}
       {currentTab === "admin" && (
-        <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} analytics={analytics} refreshAnalytics={fetchAnalytics} pendingUsers={pendingUsers} refreshPendingUsers={setPendingUsers} loading={loading}/>
+        <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} analytics={analytics} refreshAnalytics={fetchAnalytics} pendingUsers={pendingUsers} refreshPendingUsers={setPendingUsers} loading={loading} issues={issues}/>
       )}
       {currentTab === "firestore" && (
         <FirestoreStorageDashboard />

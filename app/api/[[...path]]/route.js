@@ -46,7 +46,7 @@ export async function POST(request, { params }) {
     if (path === 'register') {
       const { fullName, email, password, linkedinProfile, company, bio } = body;
       
-      if (!fullName || !email || !password || !techStack) {
+      if (!fullName || !email || !password || !company) {
         return Response.json({ error: 'Missing required fields' }, { status: 400 });
       }
 
@@ -90,6 +90,24 @@ export async function POST(request, { params }) {
         user: { id: userId, email, fullName, status: 'PENDING' }
       }, { status: 201 });
     }
+
+    //CONTACT ADMIN
+    if(path === 'contactAdmin'){
+      const {issueSubject, issueDesc} = body;
+
+      if(!issueSubject ||  !issueDesc){
+        return Response.json({error:'Missing required fields'},{status:400});
+      }
+      await db.collection('issues').insertOne({
+        id:uuidv4(),
+        issueSubject,
+        issueDesc,
+      });
+
+      return Response.json(
+        {message: 'Request Submitted successfully'},
+        {status: 200})
+    };
 
     if(path === 'change-password'){
       const currentUser = await getCurrentUser(request);
@@ -356,6 +374,16 @@ export async function GET(request, { params }) {
         .toArray();
 
       return Response.json(pendingUsers, { status: 200 });
+    }
+
+    if(path === 'admin/issues'){
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const issues = await db.collection('issues').find({},{ projection: { _id:0 }}).toArray();
+      return Response.json(issues, {status:200});
     }
 
     // ADMIN: GET ALL USERS

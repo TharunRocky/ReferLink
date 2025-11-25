@@ -12,7 +12,8 @@ import { toast } from "sonner";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function AdminDashboard({jobRequests, jobOpenings, analytics, refreshAnalytics, pendingUsers, refreshPendingUsers, loading }) {
+export default function AdminDashboard({jobRequests, jobOpenings, analytics, refreshAnalytics, pendingUsers, refreshPendingUsers, loading , issues}) {
+
 
    const handleApproveUser = async (userId) => {
       try {
@@ -117,38 +118,8 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
         <TabsList className="grid w-full grid-cols-2 mb-6">
           {/* <TabsTrigger value="users" data-testid="admin-users-tab">Users</TabsTrigger> */}
           <TabsTrigger value="pending-users">Pending Users ({pendingUsers?.length ?? 0})</TabsTrigger>
-           <TabsTrigger value="requests" data-testid="admin-requests-tab">Advanced controls</TabsTrigger>
-          {/*<TabsTrigger value="openings" data-testid="admin-openings-tab">Job Openings</TabsTrigger> */}
+           <TabsTrigger value="issues" data-testid="admin-requests-tab">Issues</TabsTrigger>
         </TabsList>
-
-        {/* <TabsContent value="users">
-          <Card>
-            <CardHeader>
-              <CardTitle>Registered Users</CardTitle>
-              <CardDescription>All registered users on the platform</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {analytics?.users.map((user) => (
-                  <div
-                    key={user.email}
-                    data-testid={`admin-user-${user.id}`}
-                    className="flex items-center justify-between p-4 border rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium">{user.fullName}</p>
-                      <p className="text-sm text-gray-500">{user.email}</p>
-                      <p className="text-sm text-gray-500">{formatDate(user.lastLoggedIn)}</p>
-                    </div>
-                    <Badge variant={user.role === "admin" ? "default" : "secondary"}>
-                      {user.role}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent> */}
         <TabsContent value="pending-users">
                       <Card>
                         <CardHeader>
@@ -192,6 +163,39 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
                         </CardContent>
                       </Card>
         </TabsContent>
+        {/* ISSUES TAB */}
+      <TabsContent value="issues">
+        <Card>
+          <CardHeader>
+            <CardTitle>Issues Reported by Users</CardTitle>
+            <CardDescription>Review reported issues</CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            {!issues || issues.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No issues reported</p>
+            ) : (
+              <div className="space-y-4">
+                {issues.map(issue => (
+                  <div
+                    key={issue.id}
+                    className="border rounded-lg p-4 bg-white shadow-sm"
+                  >
+                    <h3 className="font-semibold text-lg text-gray-900">
+                      {issue.issueSubject}
+                    </h3>
+
+                    <p className="text-gray-700 mt-2 whitespace-pre-line">
+                      {issue.issueDesc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </TabsContent>
+
       </Tabs>
     </div>
   );
