@@ -16,8 +16,10 @@ export default function NotificationSettings() {
         body: JSON.stringify({ days }),
       });
 
+      const data=await res.json();
+
       if (res.ok) {
-        toast.success("Old notifications deleted");
+        toast.success(data.message);
         setDays("");
       } else {
         toast.error("Failed to delete notifications");

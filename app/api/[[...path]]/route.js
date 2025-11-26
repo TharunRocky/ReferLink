@@ -286,13 +286,12 @@ export async function POST(request, { params }) {
       const { username, status} = body
       let temp="";
       console.log(username,status);
-      if(status === 'APPROVED' || status === 'PENDING'){
-        if(status === 'APPROVED') temp='PENDING';
-        else temp='APPROVED';
+      if(status === 'APPROVED'){
           await db.collection('users').updateOne(
           { email: username },
-          { $set: {status:temp} }
+          { $set: {status:'PENDING'} }
         );
+        return Response.json({message:`${username} is Deactivated`},{status:200});
       }
       else if(status === 'ADMIN' || status === 'USER'){
         if(status === 'ADMIN') temp='USER';
@@ -302,12 +301,9 @@ export async function POST(request, { params }) {
           { email: username },
           { $set: {role:temp} }
         );
-        console.log(res);
+         return Response.json({message:`${username} promoted to ${temp}`},{status:200});
       }
-      else{
         return Response.json({ message: 'Inavlid option' }, { status: 400 });
-      }
-      return Response.json({message: "User Config Updated successfully"},{status: 200});
     }
 
     //DELETE NOTIFICATIONS
@@ -325,7 +321,9 @@ export async function POST(request, { params }) {
         createdAt: { $lt: cutoffDate.toISOString() }
       });
       console.log(res);
-      return Response.json({message:"Notifications deleted"},{status:200});
+      const msg=`Deleted ${res.deletedCount} Notifications`;
+      console.log(msg);
+      return Response.json({message:msg},{status:200});
     }
 
 

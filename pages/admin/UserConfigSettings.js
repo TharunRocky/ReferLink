@@ -49,7 +49,7 @@ export default function UserConfigSettings() {
 
       const searchText = (debouncedSearch || "").trim(); // ✅ Ensure string
 
-    if(status === 'APPROVED' || status === 'PENDING') {
+    if(status === 'APPROVED') {
       return allUsers
         .filter((u) => u.status === status)
         .filter((u) =>
@@ -101,15 +101,16 @@ export default function UserConfigSettings() {
         return;
       }
       try {
-        console.log("Making call for",username);
         const res = await fetch("/api/admin/update-user-config", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, status }),
         });
 
+        const data=await res.json();
+
         if (res.ok) {
-          toast.success("User config updated");
+          toast.success(data.message);
           resetData();
           setUpdated(!updated);
           
@@ -144,7 +145,6 @@ export default function UserConfigSettings() {
           className="w-full border rounded px-3 py-2"
         >
           <option value="">Select status</option>
-          <option value="PENDING">Activate</option>
           <option value="APPROVED">Deactivate</option>
           <option value="USER">Make as Admin</option>
           <option value="ADMIN">Make as User</option>

@@ -1,6 +1,6 @@
 
-const CACHE_NAME = 'site-static-v1';
-const API_CACHE = 'api-cache-v1';
+const CACHE_NAME = 'site-static-v2';
+const API_CACHE = 'api-cache-v2';
 // const NETWORK_TIMEOUT = 3000;
 const assets =[
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
@@ -40,57 +40,57 @@ self.addEventListener("activate", (event) =>{
 });
 
 
-// self.addEventListener("fetch", (event) => {
-//     const requestUrl = new URL(event.request.url);
+self.addEventListener("fetch", (event) => {
+    const requestUrl = new URL(event.request.url);
 
-//   // 🔹 Skip caching for Firestore (or other APIs)
-//   if (
-//     requestUrl.origin.includes("firestore.googleapis.com") || 
-//     requestUrl.pathname.startsWith("/__/") 
-//   ) {
-//     return;
-//   }
-//   if(requestUrl.pathname.startsWith("/_next/") || assets.includes(requestUrl.pathname) || apiData.includes(requestUrl.pathname)) {
-//     event.respondWith(
-//       caches.match(event.request).then((cachedResponse) => {
-//         const fetchPromise = fetch(event.request)
-//           .then((networkResponse) => {
-//             // Only cache valid responses
-//             if (
-//               networkResponse &&
-//               networkResponse.status === 200 &&
-//               networkResponse.type === "basic"
-//             ) {
-//               const responseClone = networkResponse.clone();
-//               caches.open(CACHE_NAME).then((cache) => {
-//                 cache.put(event.request, responseClone);
-//               });
-//             }
+  // 🔹 Skip caching for Firestore (or other APIs)
+  if (
+    requestUrl.origin.includes("firestore.googleapis.com") || 
+    requestUrl.pathname.startsWith("/__/") 
+  ) {
+    return;
+  }
+  if(requestUrl.pathname.startsWith("/_next/") || assets.includes(requestUrl.pathname) || apiData.includes(requestUrl.pathname)) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            // Only cache valid responses
+            if (
+              networkResponse &&
+              networkResponse.status === 200 &&
+              networkResponse.type === "basic"
+            ) {
+              const responseClone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, responseClone);
+              });
+            }
 
-//             return networkResponse;
-//           })
-//           .catch(() => cachedResponse); // fallback if offline
+            return networkResponse;
+          })
+          .catch(() => cachedResponse); // fallback if offline
 
-//         // Return cached first, then update
-//         return cachedResponse || fetchPromise;
-//       })
-//       .catch(() => {
-//           return caches.match('/offline.html');
-//         })
-//     );
-//   }
-//   else {
-//   event.respondWith(
-//       fetch(event.request)
-//         .catch(() => {
-//           console.log('API request failed, serving offline fallback:', requestUrl.pathname);
-//           return caches.match('/offline.html');
-//         })
-//     );
-//     return;
-// }
+        // Return cached first, then update
+        return cachedResponse || fetchPromise;
+      })
+      .catch(() => {
+          return caches.match('/offline.html');
+        })
+    );
+  }
+  else {
+  event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          console.log('API request failed, serving offline fallback:', requestUrl.pathname);
+          return caches.match('/offline.html');
+        })
+    );
+    return;
+}
 
-// });
+});
 
 
 self.addEventListener("message",(event)=> {
