@@ -276,6 +276,57 @@ export async function POST(request, { params }) {
       return Response.json({ message: 'User approved' }, { status: 200 });
     }
 
+     //UPDATE USER STATUS
+    if(path === 'admin/update-user-config'){
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const { username, status} = body
+      let temp="";
+      console.log(username,status);
+      if(status === 'APPROVED'){
+          await db.collection('users').updateOne(
+          { email: username },
+          { $set: {status:'PENDING'} }
+        );
+        return Response.json({message:`${username} is Deactivated`},{status:200});
+      }
+      else if(status === 'ADMIN' || status === 'USER'){
+        if(status === 'ADMIN') temp='USER';
+        else temp='ADMIN';
+
+          const res = await db.collection('users').updateOne(
+          { email: username },
+          { $set: {role:temp} }
+        );
+         return Response.json({message:`${username} promoted to ${temp}`},{status:200});
+      }
+        return Response.json({ message: 'Inavlid option' }, { status: 400 });
+    }
+
+    //DELETE NOTIFICATIONS
+    if(path === 'admin/delete-notifications'){
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const {days} = body;
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - days);
+      console.log(cutoffDate);
+      const res=await db.collection("notifications").deleteMany({
+        createdAt: { $lt: cutoffDate.toISOString() }
+      });
+      console.log(res);
+      const msg=`Deleted ${res.deletedCount} Notifications`;
+      console.log(msg);
+      return Response.json({message:msg},{status:200});
+    }
+
+
     // ADMIN: REJECT USER
     if (path === 'admin/reject-user') {
       const currentUser = await getCurrentUser(request);
@@ -376,6 +427,7 @@ export async function GET(request, { params }) {
       return Response.json(pendingUsers, { status: 200 });
     }
 
+    //GET ALL ISSUES
     if(path === 'admin/issues'){
       const currentUser = await getCurrentUser(request);
       if (!currentUser || currentUser.role !== 'ADMIN') {
@@ -394,7 +446,7 @@ export async function GET(request, { params }) {
       }
 
       const users = await db.collection('users')
-        .find({}, { projection: { password: 0 } })
+        .find({}, { projection: { email: 1, _id:0, fullName:1, status:1, role:1 } })
         .sort({ createdAt: -1 })
         .toArray();
 

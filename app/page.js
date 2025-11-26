@@ -23,30 +23,23 @@ import useJobRequests from '@/hooks/useJobRequests';
 import useJobsOpenings from '@/hooks/useJobsOpenings';
 import GeneralChat from '@/pages/GeneralChat';
 import useChats from '@/hooks/useChats';
-import FirestoreStorageDashboard from '@/pages/FirestoreDashboard';
 import ProfileUpdateCard from '@/pages/ProfileUpdate';
+import AdvancedControls from '@/pages/admin/AdvancedControls';
 
 export default function App() {
   const { data: session, status } = useSession();
   const router = useRouter();;
-  const [pendingUsers, setPendingUsers] = useState([]);
   const [currentTab, setCurrentTab] = useState("home");
-  const [analytics, setAnalytics] = useState({});
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState([]);
   const [postUser, setPostUser] = useState("");
-   const [issues,setIssues]= useState([]);
+   
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login');
     } 
     else if(status === 'authenticated'){
-      if(session.user.role === 'ADMIN'){
-        fetchPendingUsers();
-        fetchAnalytics();
-        fetchIssues();
-      }
        fetchUser();
     }
     const tab = new URLSearchParams(window.location.search).get("tab");
@@ -86,46 +79,10 @@ export default function App() {
     }
 
 
-   const fetchAnalytics = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('api/admin/analytics');
-      setAnalytics(await response.json());
-      console.log("Loaded analytics");
-    } catch (error) {
-      toast.error("Failed to load analytics");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-    const fetchIssues = async() => {
-      setLoading(true);
-      try{
-        const res = await fetch('api/admin/issues');
-        const data = await res.json();
-        setIssues(data);
-      }catch(error){
-        console.log(error);
-        toast.error('Failed to fetch issues');
-      } finally {
-        setLoading(false);
-      }
-    }
+   
 
-  const fetchPendingUsers = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/admin/pending-users');
-      const data = await res.json();
-      setPendingUsers(data);
-    } catch (error) {
-      console.error('Error fetching pending users:', error);
-    }
-    finally{
-      setLoading(false);
-    }
-  };
+  
 
 
   if (status === 'loading') {
@@ -188,10 +145,7 @@ export default function App() {
         <HomePage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} ChangeTab={setCurrentTab} ChangeProfile={setPostUser}/>
       )}
       {currentTab === "admin" && (
-        <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} analytics={analytics} refreshAnalytics={fetchAnalytics} pendingUsers={pendingUsers} refreshPendingUsers={setPendingUsers} loading={loading} issues={issues}/>
-      )}
-      {currentTab === "firestore" && (
-        <FirestoreStorageDashboard />
+        <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} />
       )}
       {currentTab === "postOpening" && (
        <PostJobOpeningPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
@@ -207,6 +161,9 @@ export default function App() {
       )}
       {currentTab === "postProfile" && (
         <ProfileUpdateCard session={session} postUser={postUser}/>
+      )}
+      {currentTab === "advancedControls" && (
+        <AdvancedControls />
       )}
     </div>
   );

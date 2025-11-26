@@ -30,6 +30,7 @@ export default function MobileSidebar({ session, ChangeTab }) {
 
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [tab, setTab] = useState("home");
 
   if (!session) return null;
 
@@ -83,9 +84,10 @@ export default function MobileSidebar({ session, ChangeTab }) {
 
           {/* Navigation Buttons */}
           <Button
-            variant="ghost"
+            variant={tab === "home" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
+              setTab("home")
               ChangeTab("home");
               setOpen(false);
             }}
@@ -95,9 +97,10 @@ export default function MobileSidebar({ session, ChangeTab }) {
           </Button>
 
           <Button
-            variant="ghost"
+            variant={tab === "my-posts" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
+              setTab("my-posts")
               ChangeTab("my-posts");
               setOpen(false);
             }}
@@ -108,9 +111,10 @@ export default function MobileSidebar({ session, ChangeTab }) {
 
           {session.user.role === "ADMIN" && (
             <Button
-              variant="ghost"
+              variant={tab === "admin" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
+                setTab("admin")
                 ChangeTab("admin");
                 setOpen(false);
               }}
@@ -121,15 +125,16 @@ export default function MobileSidebar({ session, ChangeTab }) {
           )}
           {session.user.role === "ADMIN" && (
             <Button
-              variant="ghost"
+              variant={tab === "advancedControls" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
-                ChangeTab("firestore");
+                setTab("advancedControls")
+                ChangeTab("advancedControls");
                 setOpen(false);
               }}
             >
               <LayoutDashboard className="h-4 w-4 mr-2" />
-              Firestore
+              Advanced 
             </Button>
           )}
 
@@ -180,39 +185,6 @@ export default function MobileSidebar({ session, ChangeTab }) {
           </Button>
 
           <DropdownMenuSeparator />
-
-          {/* Notifications
-          <div className="flex items-center justify-between">
-            <p className="font-semibold text-sm">Notifications</p>
-            {unreadCount > 0 && (
-              <Button size="sm" variant="ghost" onClick={markAllAsRead}>
-                Mark all read
-              </Button>
-            )}
-          </div>
-
-          <div className="max-h-52 overflow-y-auto border rounded-md p-2">
-            {notifications.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-2">
-                No notifications
-              </p>
-            ) : (
-              notifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  className={`p-2 rounded cursor-pointer text-sm ${
-                    !notification.read ? "bg-blue-50" : ""
-                  }`}
-                  onClick={() => !notification.read && markAsRead(notification.id)}
-                >
-                  <p>{notification.message}</p>
-                  <p className="text-xs text-gray-500">
-                    {new Date(notification.createdAt).toLocaleString()}
-                  </p>
-                </div>
-              ))
-            )}
-          </div> */}
 
           <DropdownMenuSeparator />
 
