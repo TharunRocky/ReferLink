@@ -8,12 +8,25 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, Briefcase, Trash2, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import UserConfigSettings from "@/pages/admin/UserConfigSettings";
+import NotificationSettings from "@/pages/admin/NotificationSettings";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function AdminDashboard({jobRequests, jobOpenings, analytics, refreshAnalytics, pendingUsers, refreshPendingUsers, loading , issues}) {
+export default function AdminDashboard({jobRequests, jobOpenings}) {
 
+  const [issues,setIssues]= useState([]);
+  const [analytics, setAnalytics] = useState({});
+  const [pendingUsers, setPendingUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+      fetchPendingUsers();
+      fetchAnalytics();
+      fetchIssues();
+  },[]);
 
    const handleApproveUser = async (userId) => {
       try {
@@ -24,7 +37,7 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
         });
         if (res.ok) {
           toast.success('User approved successfully');
-          refreshPendingUsers();
+          fetchPendingUsers();
         }
       } catch (error) {
         toast.error('Error approving user');
@@ -40,12 +53,53 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
           });
           if (res.ok) {
             toast.success('User rejected');
-            refreshPendingUsers();
+            fetchPendingUsers();
           }
         } catch (error) {
           toast.error('Error rejecting user');
         }
       };
+
+      const fetchAnalytics = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('api/admin/analytics');
+        setAnalytics(await response.json());
+        console.log("Loaded analytics");
+      } catch (error) {
+        toast.error("Failed to load analytics");
+      } finally {
+        setLoading(false);
+      }
+  };
+
+   const fetchIssues = async() => {
+      setLoading(true);
+      try{
+        const res = await fetch('api/admin/issues');
+        const data = await res.json();
+        setIssues(data);
+      }catch(error){
+        console.log(error);
+        toast.error('Failed to fetch issues');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    const fetchPendingUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/pending-users');
+      const data = await res.json();
+      setPendingUsers(data);
+    } catch (error) {
+      console.error('Error fetching pending users:', error);
+    }
+    finally{
+      setLoading(false);
+    }
+  };
 
   function formatDate(dateString){
     const date=new Date(dateString);
@@ -119,6 +173,7 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
           {/* <TabsTrigger value="users" data-testid="admin-users-tab">Users</TabsTrigger> */}
           <TabsTrigger value="pending-users">Pending Users ({pendingUsers?.length ?? 0})</TabsTrigger>
            <TabsTrigger value="issues" data-testid="admin-requests-tab">Issues</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         <TabsContent value="pending-users">
                       <Card>
@@ -195,6 +250,38 @@ export default function AdminDashboard({jobRequests, jobOpenings, analytics, ref
           </CardContent>
         </Card>
       </TabsContent>
+      <TabsContent value="settings">
+        <Card>
+          <CardHeader>
+            <CardTitle>Admin Settings</CardTitle>
+            <CardDescription>Manage notifications and user configurations</CardDescription>
+          </CardHeader>
+          <CardContent>
+
+            {/* --- NOTIFICATION DELETE BLOCK --- */}
+            <div className="border rounded-lg p-4 mb-6">
+              <h3 className="font-semibold text-lg mb-2">Notifications Options</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Delete old notifications based on the number of days
+              </p>
+
+              <NotificationSettings />
+            </div>
+
+            {/* --- USER CONFIG BLOCK --- */}
+            <div className="border rounded-lg p-4">
+              <h3 className="font-semibold text-lg mb-2">User Config</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Update username or modify user status
+              </p>
+
+              <UserConfigSettings />
+            </div>
+
+          </CardContent>
+        </Card>
+      </TabsContent>
+
 
       </Tabs>
     </div>

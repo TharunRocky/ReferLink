@@ -22,6 +22,13 @@ import {
 
 
 export default function LoginPage() {
+
+  // const session = await getServerSession(authOptions);
+
+  //   if (session) {
+  //     redirect('/');
+  //   }
+
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
@@ -40,6 +47,7 @@ export default function LoginPage() {
     issueDesc: '',
   });
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -53,9 +61,7 @@ export default function LoginPage() {
         toast.error(result.error);
       } else {
         toast.success('Logged in successfully');
-        // small vibration on supported devices
-        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(40);
-        router.push('/');
+        router.replace('/');
         router.refresh();
       }
     } catch (err) {

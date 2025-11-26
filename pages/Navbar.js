@@ -153,18 +153,19 @@ export default function Navbar({ session,status,ChangeTab}) {
                   </Button>
                 </p>
               )}
+
               {session.user.role === "ADMIN" && (
                 <p >
                   <Button
                     onClick = {() => {
-                        setTab("firestore")
-                        ChangeTab("firestore")
+                        setTab("advancedControls")
+                        ChangeTab("advancedControls")
                     }}
-                    variant={tab === "firestore" ? "default" : "ghost"}
-                    data-testid="nav-admin-link"
+                    variant={tab === "advancedControls" ? "default" : "ghost"}
+                    data-testid="nav-advancedControls-link"
                   >
                     <LayoutDashboard className="h-4 w-4 mr-2" />
-                    Firestore
+                    Advanced
                   </Button>
                 </p>
               )}
