@@ -101,6 +101,18 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
     }
   };
 
+  const handleDelete = async ( id) => {
+    try {
+      await fetch(`/api/admin/issues?issue_id=${id}`, {
+            method: 'DELETE'
+        });
+      toast.success("issue deleted successfull");
+      setIssues(issue => issue.filter(iss => iss.id!==id));
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Delete failed");
+    }
+  };
+
   function formatDate(dateString){
     const date=new Date(dateString);
     return date.toLocaleString("en-IN",{
@@ -143,7 +155,7 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
           </CardContent>
         </Card>
 
-        <Card data-testid="analytics-requests-card">
+        {/* <Card data-testid="analytics-requests-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Job Requests</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
@@ -153,9 +165,9 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
               {analytics?.totalJobRequests ?? 0}
               </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
-        <Card data-testid="analytics-openings-card">
+        {/* <Card data-testid="analytics-openings-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Job Openings</CardTitle>
             <Briefcase className="h-4 w-4 text-muted-foreground" />
@@ -165,7 +177,7 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
               {analytics?.totalJobOpenings ?? 0}
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       <Tabs defaultValue="pending-users" className="w-full">
@@ -173,7 +185,6 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
           {/* <TabsTrigger value="users" data-testid="admin-users-tab">Users</TabsTrigger> */}
           <TabsTrigger value="pending-users">Pending Users ({pendingUsers?.length ?? 0})</TabsTrigger>
            <TabsTrigger value="issues" data-testid="admin-requests-tab">Issues</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         <TabsContent value="pending-users">
                       <Card>
@@ -224,6 +235,8 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
           <CardHeader>
             <CardTitle>Issues Reported by Users</CardTitle>
             <CardDescription>Review reported issues</CardDescription>
+            
+            
           </CardHeader>
 
           <CardContent>
@@ -243,41 +256,28 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
                     <p className="text-gray-700 mt-2 whitespace-pre-line">
                       {issue.issueDesc}
                     </p>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDelete(issue.id)}
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
+                  
+
+
+                  
                 ))}
               </div>
+              
             )}
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="settings">
-        <Card>
-          <CardHeader>
-            <CardTitle>Admin Settings</CardTitle>
-            <CardDescription>Manage notifications and user configurations</CardDescription>
-          </CardHeader>
-          <CardContent>
-
-            {/* --- NOTIFICATION DELETE BLOCK --- */}
-            <div className="border rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-lg mb-2">Notifications Options</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Delete old notifications based on the number of days
-              </p>
-
-              <NotificationSettings />
-            </div>
-
-            {/* --- USER CONFIG BLOCK --- */}
-            <div className="border rounded-lg p-4">
-              <h3 className="font-semibold text-lg mb-2">User Config</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Update username or modify user status
-              </p>
-
-              <UserConfigSettings />
-            </div>
-
           </CardContent>
         </Card>
       </TabsContent>

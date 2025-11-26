@@ -456,46 +456,12 @@ export async function GET(request, { params }) {
     // ADMIN: GET ANALYTICS
     if(path === 'admin/analytics'){
       const totalUsers = await db.collection('users').countDocuments({});
-      const totalJobRequests = await db.collection('jobRequests').countDocuments({});
-      const totalJobOpenings = await db.collection('jobOpenings').countDocuments({});
 
-     // const users = await db.collection('users').find({},{projection :{'fullName':1,'email':1,'lastLoggedIn':1,'role':1}}).sort({lastLoggedIn:-1}).toArray();
 
       return Response.json({
-        totalUsers,
-        totalJobOpenings,
-        totalJobRequests
+        totalUsers
       }, {status : 200});
-      // return Response.json({"message":"Success"},{status:200})
     }
-
-    // if(path === 'messages'){
-    //     const room = searchParams.get("room");
-    //   try {
-    //     let messages = await db
-    //       .collection("messages")
-    //       .find({ room })
-    //       .project({ _id: 0 })
-    //       .limit(1000)
-    //       .toArray();
-    //     // Convert timestamp strings → Date instances
-    //     messages = messages.map((msg) => {
-    //       if (typeof msg.timestamp === "string") {
-    //         msg.timestamp = new Date(msg.timestamp);
-    //       }
-    //       return msg;
-    //     });
-
-    //     // Sort by timestamp
-    //     messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-    //    // console.log(messages);
-
-    //     return Response.json(messages);
-    //   } catch (error) {
-    //     console.error(error);
-    //     return new Response("Failed to fetch messages", { status: 500 });
-    //   }
-    // }
 
 
     return Response.json({ error: 'Not found' }, { status: 404 });
@@ -574,10 +540,21 @@ export async function DELETE(request, { params }) {
     else return Response.json({"message" : "Failed to delete the Job"},{status:400});
     }
 
+    //DELETE ISSUES
+    if(path === 'admin/issues'){
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      const issue_id = searchParams.get("issue_id");
+      await db.collection('issues').deleteOne({ id: issue_id });
+      return Response.json({message: "Issue post deleted"}, {status:200});
+    }
+
     // ADMIN: DELETE USER
     if (path === 'admin/users') {
       const currentUser = await getCurrentUser(request);
-      if (!currentUser) {
+      if (!currentUser || currentUser.role !== 'ADMIN') {
         return Response.json({ error: 'Unauthorized' }, { status: 401 });
       }
 
