@@ -22,12 +22,19 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <link rel="canonical" href="https://www.referlink.space" />
         <meta name="theme-color" content="#ffffff"/>
-    <meta name="mobile-web-app-capable" content="yes"/>
-<meta name="application-name" content="ReferLink"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F97316"/>
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a"/>
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <meta name="application-name" content="ReferLink"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"/>
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a"/>
+        <meta property="og.title" content="ReferLink - Private Job Referral Platform" />
+        <meta property="og:description" content="connect, Share job opportuniites, and request referrals in a trusted communinty."/>
+        <meta property="og.image" content="https://www.referlink.space/icons/logo.png" />
+        <meta property="og.url" content="https://www.referlink.space" />
+        <meta property="og.type" content="website" />
+        
       </head>
       <body className={inter.className}>
         <SessionProviderWrapper>
