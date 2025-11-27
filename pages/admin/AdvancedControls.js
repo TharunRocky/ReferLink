@@ -22,6 +22,8 @@ export default function AdvancedControls() {
   const [allUsers1, setAllUsers1] = useState([]);
   const [updated,setUpdated] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [selectedSection, setSelectedSection] = useState("notifications");
+
 
   useEffect(() => {
     
@@ -52,57 +54,140 @@ if (loading) {
   }
 
   return (
+    // <div className="max-w-7xl mx-auto px-4 py-8">
+    //   <div className="mb-8">
+    //     <h1 className="text-4xl font-bold text-gray-900 mb-2">Advanced Controls</h1>
+    //     <p className="text-gray-600">Platform Usage Management</p>
+    //   </div>
+
+
+    //   <Tabs defaultValue="settings" className="w-full">
+    //     <TabsList className="grid w-full grid-cols-2 mb-6">
+    //         <TabsTrigger value="settings">Settings</TabsTrigger>
+    //         <TabsTrigger value="firestore">Usage</TabsTrigger>
+    //     </TabsList>
+    //   <TabsContent value="settings">
+    //     <Card>
+    //       <CardHeader>
+    //         <CardTitle>Admin Settings</CardTitle>
+    //         <CardDescription>Manage notifications and user configurations</CardDescription>
+    //       </CardHeader>
+    //       <CardContent>
+
+    //         {/* --- NOTIFICATION DELETE BLOCK --- */}
+    //           <NotificationSettings />
+
+    //         {/* --- USER CONFIG BLOCK --- */}
+    //           <UserConfigSettings allUsers={allUsers} setUpdated={setUpdated}/>
+
+    //         {/* --- DELETE CHAT BLOCK --- */}
+    //           <ChatSettings/>
+
+    //         {/* --- Generate Temporary Password --- */}
+    //         <TemporaryPasswordGenerator users={allUsers1}/>
+
+    //       </CardContent>
+    //     </Card>
+    //   </TabsContent>
+
+    //   <TabsContent value="firestore">
+    //     <Card>
+    //       <CardHeader>
+    //         <CardTitle>Analytics</CardTitle>
+    //         <CardDescription>Storage and Network Usage</CardDescription>
+    //       </CardHeader>
+    //       <CardContent>
+
+    //         <FirestoreStorageDashboard />
+    //       </CardContent>
+    //     </Card>
+    //   </TabsContent>
+
+
+    //   </Tabs>
+    // </div>
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Advanced Controls</h1>
-        <p className="text-gray-600">Platform Usage Management</p>
-      </div>
+  <div className="mb-8">
+    <h1 className="text-4xl font-bold text-gray-900 mb-2">Advanced Controls</h1>
+    <p className="text-gray-600">Platform Usage Management</p>
+  </div>
 
+  <Tabs defaultValue="settings" className="w-full">
+    <TabsList className="grid w-full grid-cols-2 mb-6">
+      <TabsTrigger value="settings">Settings</TabsTrigger>
+      <TabsTrigger value="firestore">Usage</TabsTrigger>
+    </TabsList>
 
-      <Tabs defaultValue="settings" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-            <TabsTrigger value="firestore">Usage</TabsTrigger>
-        </TabsList>
-      <TabsContent value="settings">
-        <Card>
-          <CardHeader>
-            <CardTitle>Admin Settings</CardTitle>
-            <CardDescription>Manage notifications and user configurations</CardDescription>
-          </CardHeader>
-          <CardContent>
+    {/* SETTINGS TAB */}
+    <TabsContent value="settings">
+      <Card>
+        <CardHeader>
+          <CardTitle>Admin Settings</CardTitle>
+          <CardDescription>
+            Manage notifications and user configurations
+          </CardDescription>
+        </CardHeader>
 
-            {/* --- NOTIFICATION DELETE BLOCK --- */}
-              <NotificationSettings />
+        <CardContent>
+          {/* ------------------------- */}
+          {/* DROPDOWN SELECTOR         */}
+          {/* ------------------------- */}
 
-            {/* --- USER CONFIG BLOCK --- */}
-              <UserConfigSettings allUsers={allUsers} setUpdated={setUpdated}/>
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">
+              Select Setting
+            </label>
 
-            {/* --- DELETE CHAT BLOCK --- */}
-              <ChatSettings/>
+            <select
+              value={selectedSection}
+              onChange={(e) => setSelectedSection(e.target.value)}
+              className="w-full border rounded p-2"
+            >
+              <option value="notifications">Notifications</option>
+              <option value="userConfig">User Config</option>
+              <option value="deleteChats">Delete Chats</option>
+              <option value="tempPassword">Temporary Password</option>
+            </select>
+          </div>
 
-            {/* --- Generate Temporary Password --- */}
-            <TemporaryPasswordGenerator users={allUsers1}/>
+          {/* ------------------------- */}
+          {/* CONDITIONAL RENDER BLOCKS */}
+          {/* ------------------------- */}
 
-          </CardContent>
-        </Card>
-      </TabsContent>
+          {selectedSection === "notifications" && (
+            <NotificationSettings />
+          )}
 
-      <TabsContent value="firestore">
-        <Card>
-          <CardHeader>
-            <CardTitle>Analytics</CardTitle>
-            <CardDescription>Storage and Network Usage</CardDescription>
-          </CardHeader>
-          <CardContent>
+          {selectedSection === "userConfig" && (
+            <UserConfigSettings
+              allUsers={allUsers}
+              setUpdated={setUpdated}
+            />
+          )}
 
-            <FirestoreStorageDashboard />
-          </CardContent>
-        </Card>
-      </TabsContent>
+          {selectedSection === "deleteChats" && <ChatSettings />}
 
+          {selectedSection === "tempPassword" && (
+            <TemporaryPasswordGenerator users={allUsers1} />
+          )}
+        </CardContent>
+      </Card>
+    </TabsContent>
 
-      </Tabs>
-    </div>
+    {/* FIRESTORE TAB */}
+    <TabsContent value="firestore">
+      <Card>
+        <CardHeader>
+          <CardTitle>Analytics</CardTitle>
+          <CardDescription>Storage and Network Usage</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FirestoreStorageDashboard />
+        </CardContent>
+      </Card>
+    </TabsContent>
+  </Tabs>
+</div>
+
   );
 }

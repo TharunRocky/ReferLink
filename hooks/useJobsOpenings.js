@@ -13,7 +13,6 @@ export default function useJobsOpenings() {
         );
         
     const unsubscribe = onSnapshot(q,(snapshot)=>{
-        console.log("Listener started for JobOpening");
         const data=snapshot.docChanges();
         let hasUpdates =false;
         const addedJobs =[];

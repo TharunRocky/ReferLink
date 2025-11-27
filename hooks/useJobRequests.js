@@ -13,7 +13,6 @@ export default function useJobRequests() {
         );
         
     const unsubscribe = onSnapshot(q,(snapshot)=>{
-        console.log("Listener started for job Requests");
         
         let hasUpdates =false;
         const addedJobs =[];
@@ -41,7 +40,6 @@ export default function useJobRequests() {
         console.warn("Firestore offline expected: ",error.message);
     });
     return () =>{
-        console.log("Listener removed");
         unsubscribe();
     }
     },[]);
