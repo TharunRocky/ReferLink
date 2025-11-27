@@ -36,6 +36,17 @@ const nextConfig = {
       },
     ];
   },
+
+    async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{type: 'host', value: 'referlink.space'}],
+        destination: 'https://www.referlink.space/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
