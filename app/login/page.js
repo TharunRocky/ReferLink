@@ -193,8 +193,8 @@ export default function LoginPage() {
                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
                     </div>
 
-                    <div className="flex items-center justify-between text-sm text-gray-700">
-                      <label className="flex items-center gap-2">
+                    {/* <div className="flex items-center justify-between text-sm text-gray-700">
+                      <label className="flex items-center gap-2"> */}
                         {/* <input
       type="checkbox"
       checked={loginData.remember}
@@ -202,9 +202,9 @@ export default function LoginPage() {
       className="h-4 w-4"
     />
     Remember me */}
-                      </label>
+                      {/* </label>
                       <a href="#" className="text-orange-600 hover:underline">Forgot password?</a>
-                    </div>
+                    </div> */}
 
                     <Button className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white rounded-md">
                       {isLoading ? "Signing in…" : "Sign in now"}
@@ -334,8 +334,8 @@ export default function LoginPage() {
                           onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
                       </div>
 
-                      <div className="flex items-center justify-between text-sm text-gray-700">
-                        <label className="flex items-center gap-2">
+                      {/* <div className="flex items-center justify-between text-sm text-gray-700">
+                        <label className="flex items-center gap-2"> */}
                           {/* <input
       type="checkbox"
       checked={loginData.remember}
@@ -343,9 +343,9 @@ export default function LoginPage() {
       className="h-4 w-4"
     />
     Remember me */}
-                        </label>
+                        {/* </label>
                         <a className="text-orange-600 hover:underline" href="#">Forgot?</a>
-                      </div>
+                      </div> */}
 
                       <Button className="w-full h-11 bg-orange-600 hover:bg-orange-700 text-white rounded-md">
                         {isLoading ? "Signing in…" : "Sign in"}
