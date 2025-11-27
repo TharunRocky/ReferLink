@@ -29,11 +29,11 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"/>
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a"/>
-        <meta property="og.title" content="ReferLink - Private Job Referral Platform" />
+        <meta property="og:title" content="ReferLink - Private Job Referral Platform" />
         <meta property="og:description" content="connect, Share job opportuniites, and request referrals in a trusted communinty."/>
-        <meta property="og.image" content="https://www.referlink.space/icons/logo.png" />
-        <meta property="og.url" content="https://www.referlink.space" />
-        <meta property="og.type" content="website" />
+        <meta property="og:image" content="https://www.referlink.space/icons/logo.png" />
+        <meta property="og:url" content="https://www.referlink.space" />
+        <meta property="og:type" content="website" />
         
       </head>
       <body className={inter.className}>
