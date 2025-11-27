@@ -57,7 +57,7 @@ function generateTempPassword(length = 10) {
             <SelectValue placeholder="Select a user" />
           </SelectTrigger>
           <SelectContent>
-            {users.length === 0 ? (
+            {!users ||users.length === 0 ? (
               <li className="p-2 text-gray-500 italic select-none">No users found.</li>
             ) : (
             users.map((u) => (
