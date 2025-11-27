@@ -155,11 +155,10 @@ export default function HomePage({ session, jobRequests, jobOpenings, ChangeTab,
                     </div>
                     <div className="mt-4 flex justify-end">
                     <Button
-                      variant="outline"
+                      variant="default"
                       onClick={() => {
                         ChangeTab("postProfile")
                         ChangeProfile(job.email)}}
-                      data-testid={`view-profile-${job.id}`}
                     >
                       View Profile
                     </Button>
@@ -229,7 +228,7 @@ export default function HomePage({ session, jobRequests, jobOpenings, ChangeTab,
                     </div>
                     <div className="mt-4 flex justify-end">
                     <Button
-                      variant="outline"
+                      variant="default"
                       onClick={() => {
                         ChangeTab("postProfile")
                         ChangeProfile(job.email)}}
