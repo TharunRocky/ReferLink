@@ -11,13 +11,45 @@ import { toast } from "sonner";
 import UserConfigSettings from "@/pages/admin/UserConfigSettings";
 import NotificationSettings from "@/pages/admin/NotificationSettings";
 import FirestoreStorageDashboard from '@/pages/FirestoreDashboard';
+import ChatSettings from '@/pages/admin/ChatSettings';
+import TemporaryPasswordGenerator from "./GeneratePassword";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 export default function AdvancedControls() {
+  const [allUsers, setAllUsers] = useState([]);
+  const [allUsers1, setAllUsers1] = useState([]);
+  const [updated,setUpdated] = useState(true);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    
+    async function fetchUsers() {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/admin/users");
+        const data = await res.json();
+        setAllUsers(data);  
+        setAllUsers1(data);  
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to load usernames");
+      }finally{
+        setLoading(false);
+      }
+    }
 
+        fetchUsers();
+  }, [updated]);
+
+if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading analytics...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -41,24 +73,16 @@ export default function AdvancedControls() {
           <CardContent>
 
             {/* --- NOTIFICATION DELETE BLOCK --- */}
-            <div className="border rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-lg mb-2">Notifications Options</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Delete old notifications based on the number of days
-              </p>
-
               <NotificationSettings />
-            </div>
 
             {/* --- USER CONFIG BLOCK --- */}
-            <div className="border rounded-lg p-4">
-              <h3 className="font-semibold text-lg mb-2">User Config</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Update username or modify user status
-              </p>
+              <UserConfigSettings allUsers={allUsers} setUpdated={setUpdated}/>
 
-              <UserConfigSettings />
-            </div>
+            {/* --- DELETE CHAT BLOCK --- */}
+              <ChatSettings/>
+
+            {/* --- Generate Temporary Password --- */}
+            <TemporaryPasswordGenerator users={allUsers1}/>
 
           </CardContent>
         </Card>

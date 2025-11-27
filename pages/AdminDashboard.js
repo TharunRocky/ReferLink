@@ -23,10 +23,12 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
 
 
   useEffect(() => {
+      setLoading(true);
       fetchPendingUsers();
       fetchAnalytics();
       fetchIssues();
-  },[]);
+      setLoading(false);
+  },[loading]);
 
    const handleApproveUser = async (userId) => {
       try {
@@ -61,20 +63,16 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
       };
 
       const fetchAnalytics = async () => {
-      setLoading(true);
       try {
         const response = await fetch('api/admin/analytics');
         setAnalytics(await response.json());
         console.log("Loaded analytics");
       } catch (error) {
         toast.error("Failed to load analytics");
-      } finally {
-        setLoading(false);
       }
   };
 
    const fetchIssues = async() => {
-      setLoading(true);
       try{
         const res = await fetch('api/admin/issues');
         const data = await res.json();
@@ -82,22 +80,16 @@ export default function AdminDashboard({jobRequests, jobOpenings}) {
       }catch(error){
         console.log(error);
         toast.error('Failed to fetch issues');
-      } finally {
-        setLoading(false);
       }
     }
 
     const fetchPendingUsers = async () => {
-    setLoading(true);
     try {
       const res = await fetch('/api/admin/pending-users');
       const data = await res.json();
       setPendingUsers(data);
     } catch (error) {
       console.error('Error fetching pending users:', error);
-    }
-    finally{
-      setLoading(false);
     }
   };
 

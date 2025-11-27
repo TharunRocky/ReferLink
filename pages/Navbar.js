@@ -20,10 +20,9 @@ import MobileSidebar from "@/components/ui/MobileSidebar";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function Navbar({ session,status,ChangeTab}) {
+export default function Navbar({ session,status,ChangeTab, tab}) {
   if(!session) return null;
   const [notifications, setNotifications] = useState([]);
-  const [tab, setTab] = useState("home");
   const [changing, setChanging] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -110,14 +109,13 @@ export default function Navbar({ session,status,ChangeTab}) {
           <div className="flex items-center space-x-8">
             
             <p className="text-2xl font-bold text-gray-900">
-              <MobileSidebar session={session} ChangeTab={ChangeTab} /> JobSearch
+              <MobileSidebar session={session} ChangeTab={ChangeTab} tab={tab} /> JobSearch
             </p>
             
             <div className="hidden md:flex space-x-1">
               <p>
                 <Button
                  onClick = {() => {
-                        setTab("home")
                         ChangeTab("home")
                     }}
                   variant={tab === "home" ? "default" : "ghost"}
@@ -129,7 +127,6 @@ export default function Navbar({ session,status,ChangeTab}) {
               <p>
                 <Button
                     onClick = {() => {
-                        setTab("my-posts")
                         ChangeTab("my-posts")
                     }}
                   variant={tab ==="my-posts" ? "default" : "ghost"}
@@ -142,7 +139,6 @@ export default function Navbar({ session,status,ChangeTab}) {
                 <p >
                   <Button
                     onClick = {() => {
-                        setTab("admin")
                         ChangeTab("admin")
                     }}
                     variant={tab === "admin" ? "default" : "ghost"}
@@ -158,7 +154,6 @@ export default function Navbar({ session,status,ChangeTab}) {
                 <p >
                   <Button
                     onClick = {() => {
-                        setTab("advancedControls")
                         ChangeTab("advancedControls")
                     }}
                     variant={tab === "advancedControls" ? "default" : "ghost"}
@@ -182,7 +177,6 @@ export default function Navbar({ session,status,ChangeTab}) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <div onClick = {() => {
-                      setTab("home")
                       ChangeTab("postRequest")
                     }}>
                   <DropdownMenuItem data-testid="nav-post-request-link">
@@ -192,7 +186,6 @@ export default function Navbar({ session,status,ChangeTab}) {
                 </div>
                 <div 
                     onClick = {() => {
-                        setTab("home")
                         ChangeTab("postOpening")
                     }}>
                   <DropdownMenuItem data-testid="nav-post-opening-link">
@@ -202,7 +195,6 @@ export default function Navbar({ session,status,ChangeTab}) {
                 </div>
                 <div 
                     onClick = {() => {
-                        setTab("")
                         ChangeTab("generalChat")
                     }}>
                   <DropdownMenuItem data-testid="nav-general-chat-link">
@@ -212,7 +204,6 @@ export default function Navbar({ session,status,ChangeTab}) {
                 </div>
                 <div 
                     onClick = {() => {
-                        setTab("")
                         ChangeTab("profile")
                     }}>
                   <DropdownMenuItem data-testid="nav-general-chat-link">

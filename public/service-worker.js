@@ -1,6 +1,6 @@
 
-const CACHE_NAME = 'site-static-v2';
-const API_CACHE = 'api-cache-v2';
+const CACHE_NAME = 'site-static-v3';
+const API_CACHE = 'api-cache-v3';
 // const NETWORK_TIMEOUT = 3000;
 const assets =[
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
