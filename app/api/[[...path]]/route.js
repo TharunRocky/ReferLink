@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { subBusinessDays } from 'date-fns';
 import { Dumbbell } from 'lucide-react';
-import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest, postMessage} from '@/lib/firebase/firebaseClient';
+import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest, postMessage, DeleteChatsRange} from '@/lib/firebase/firebaseClient';
 
 
 const uri = process.env.MONGO_URL;
@@ -69,6 +69,7 @@ export async function POST(request, { params }) {
         bio: bio || '',
         role: 'USER',
         status: 'PENDING',
+        approvedBy:'',
         createdAt: new Date().toISOString(),
       };
 
@@ -111,6 +112,9 @@ export async function POST(request, { params }) {
 
     if(path === 'change-password'){
       const currentUser = await getCurrentUser(request);
+      if (!currentUser) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
       const {password} =body;
       const hashedPassword = await hash(password, 12);
 
@@ -259,7 +263,7 @@ export async function POST(request, { params }) {
       const { userId } = body;
       await db.collection('users').updateOne(
         { id: userId },
-        { $set: { status: 'APPROVED' } }
+        { $set: { status: 'APPROVED', approvedBy:currentUser.email } }
       );
 
       // Notify user
@@ -274,6 +278,19 @@ export async function POST(request, { params }) {
       });
 
       return Response.json({ message: 'User approved' }, { status: 200 });
+    }
+
+    //GENERATE PASSWORD
+    if(path === 'admin/generate-password'){
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const {user, password}= body;
+      const hashedPassword= await hash(password,12);
+      await db.collection('users').updateOne({email: user},{$set: {password: hashedPassword}});
+      return Response.json({ message: 'Password Generated Successfully' }, { status: 201 });
     }
 
      //UPDATE USER STATUS
@@ -324,6 +341,20 @@ export async function POST(request, { params }) {
       const msg=`Deleted ${res.deletedCount} Notifications`;
       console.log(msg);
       return Response.json({message:msg},{status:200});
+    }
+
+    if(path === 'admin/delete-chats'){
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser || currentUser.role !== 'ADMIN') {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const {startDate, endDate} = body;
+
+      const res = await DeleteChatsRange(startDate, endDate);
+      if(res.success)
+         return Response.json({message: `Deleted ${res.count} between ${startDate} and ${endDate}`},{status:200});
+      return Response.json({message:"Failed to delete chats"},{status:500});
     }
 
 

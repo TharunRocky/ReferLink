@@ -26,11 +26,10 @@ import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { signOut } from "next-auth/react";
 
-export default function MobileSidebar({ session, ChangeTab }) {
+export default function MobileSidebar({ session, ChangeTab, tab }) {
 
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [tab, setTab] = useState("home");
 
   if (!session) return null;
 
@@ -87,7 +86,6 @@ export default function MobileSidebar({ session, ChangeTab }) {
             variant={tab === "home" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              setTab("home")
               ChangeTab("home");
               setOpen(false);
             }}
@@ -100,7 +98,6 @@ export default function MobileSidebar({ session, ChangeTab }) {
             variant={tab === "my-posts" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              setTab("my-posts")
               ChangeTab("my-posts");
               setOpen(false);
             }}
@@ -114,7 +111,6 @@ export default function MobileSidebar({ session, ChangeTab }) {
               variant={tab === "admin" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
-                setTab("admin")
                 ChangeTab("admin");
                 setOpen(false);
               }}
@@ -128,7 +124,6 @@ export default function MobileSidebar({ session, ChangeTab }) {
               variant={tab === "advancedControls" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
-                setTab("advancedControls")
                 ChangeTab("advancedControls");
                 setOpen(false);
               }}
@@ -144,7 +139,7 @@ export default function MobileSidebar({ session, ChangeTab }) {
           <p className="font-semibold text-sm text-gray-500">Post Actions</p>
 
           <Button
-            variant="ghost"
+            variant={tab === "postRequest" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
               ChangeTab("postRequest");
@@ -156,7 +151,7 @@ export default function MobileSidebar({ session, ChangeTab }) {
           </Button>
 
           <Button
-            variant="ghost"
+            variant={tab === "postOpening" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
               ChangeTab("postOpening");
@@ -173,7 +168,7 @@ export default function MobileSidebar({ session, ChangeTab }) {
           <p className="font-semibold text-sm text-gray-500">Discussion Rooms</p>
 
           <Button
-            variant="ghost"
+            variant={tab === "generalChat" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
               ChangeTab("generalChat");
@@ -191,7 +186,7 @@ export default function MobileSidebar({ session, ChangeTab }) {
           {/* Profile Button at Bottom */}
           <div className="mt-6">
             <Button
-              variant="ghost"
+              variant={tab === "profile" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
                 ChangeTab("profile");

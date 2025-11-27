@@ -16,33 +16,18 @@ function useDebounce(value, delay = 200) {
   return debounced;
 }
 
-export default function UserConfigSettings() {
+export default function UserConfigSettings({allUsers, setUpdated}) {
   const [status, setStatus] = useState("");
   const [username, setUsername] = useState("");
   const [search, setSearch] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [allUsers, setAllUsers] = useState([]);
-  const [updated,setUpdated] = useState(true);
 
   const wrapperRef = useRef(null);
 
-      // Fetch usernames from backend
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await fetch("/api/admin/users");
-        const data = await res.json();
-        setAllUsers(data);  
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to load usernames");
-      }
-    }
-        fetchUsers();
-  }, [updated]);
 
 
   const debouncedSearch = useDebounce(search);
+  console.log(allUsers);
 
   const filteredUsers = useMemo(() => {
     if (!status) return [];
@@ -134,6 +119,11 @@ export default function UserConfigSettings() {
   }, []);
 
   return (
+     <div className="border rounded-lg p-4">
+              <h3 className="font-semibold text-lg mb-2">User Config</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Modify user status
+              </p>
     <div className="space-y-4 max-w-md" ref={wrapperRef}>
 
       {/* STATUS SELECT */}
@@ -198,6 +188,7 @@ export default function UserConfigSettings() {
       <Button className="w-full" onClick={handleSubmit}>
         Update User
       </Button>
+    </div>
     </div>
   );
 }

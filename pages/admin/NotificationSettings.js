@@ -9,6 +9,10 @@ export default function NotificationSettings() {
   const [days, setDays] = useState("");
 
   const handleSubmit = async () => {
+    if(days===""){
+      toast.error("Please Enter no. of days");
+      return;
+    }
     try {
       const res = await fetch("/api/admin/delete-notifications", {
         method: "POST",
@@ -30,10 +34,15 @@ export default function NotificationSettings() {
   };
 
   return (
+      <div className="border rounded-lg p-4 mb-6">
+              <h3 className="font-semibold text-lg mb-2">Notifications </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Delete old notifications based on the number of days
+              </p>
     <div className="space-y-4 max-w-md">
       <Input
         type="number"
-        placeholder="Enter days"
+        placeholder="Delete chat older than"
         value={days}
         onChange={(e) => setDays(e.target.value)}
       />
@@ -41,6 +50,7 @@ export default function NotificationSettings() {
       <Button className="w-full" onClick={handleSubmit}>
         Delete Notifications
       </Button>
+    </div>
     </div>
   );
 }

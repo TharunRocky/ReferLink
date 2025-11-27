@@ -137,7 +137,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <Navbar session={session} status={status} ChangeTab={setCurrentTab} />
+      <Navbar session={session} status={status} tab={currentTab} ChangeTab={setCurrentTab} />
       {currentTab === "my-posts" && (
         <MyPostsPage  session={session} jobRequests={jobRequests} jobOpenings={jobOpenings}/>
       )}
