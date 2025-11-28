@@ -10,10 +10,10 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 export default function SendNotifications() {
   const [topic, setTopic] = useState("");
   const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [content, setContent] = useState("");
 
   const handleSend = async () => {
-    if (!topic || !title || !body) {
+    if (!topic || !title || !content) {
       toast.error("Please fill in all fields.");
       return;
     }
@@ -22,16 +22,15 @@ export default function SendNotifications() {
       const res = await fetch("/api/sendTopic", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, title, body }),
+        body: JSON.stringify({ topic, title, content }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         toast.success(data.message || "Notification sent!");
-        setTopic("");
         setTitle("");
-        setBody("");
+        setContent("");
       } else {
         toast.error("Failed to send notification");
       }
@@ -58,12 +57,6 @@ export default function SendNotifications() {
             <SelectItem value="alerts">Alerts</SelectItem>
           </SelectContent>
         </Select>
-        {/* <Input
-          type="text"
-          placeholder="Topic (e.g., news)"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-        /> */}
 
         <Input
           type="text"
@@ -74,8 +67,8 @@ export default function SendNotifications() {
 
         <Textarea
           placeholder="Notification Body"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
         />
 
         <Button className="w-full" onClick={handleSend}>
