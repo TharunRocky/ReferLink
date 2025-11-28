@@ -181,6 +181,20 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
 
           <DropdownMenuSeparator />
 
+          <Button
+            variant={tab === "subscribe" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => {
+              ChangeTab("subscribe");
+              setOpen(false);
+            }}
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            Subscribe
+          </Button>
+
+
+
           <DropdownMenuSeparator />
 
           {/* Profile Button at Bottom */}

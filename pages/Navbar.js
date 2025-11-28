@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import MobileSidebar from "@/components/ui/MobileSidebar";
+import { useFcmToken } from "@/hooks/useFCMToken";
 
 export default function Navbar({ session, status, ChangeTab, tab }) {
   if (!session) return null;
@@ -50,6 +51,27 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
       console.error("Error fetching notifications:", error);
     }
   };
+
+
+ 
+  const { generateToken } = useFcmToken();
+
+  const subscribe = async () => {
+    const token = await generateToken();
+    if (!token) return;
+
+    await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, topic: "news" }),
+    });
+
+    alert("Subscribed to topic: news");
+  };
+
+ 
+
+
 
   /* --------------------------------------------------------
      DESKTOP SCROLL — Close when at top & scrolling DOWN
@@ -185,6 +207,7 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
                   <DropdownMenuItem onClick={() => ChangeTab("postOpening")}><FileText className="h-4 w-4 mr-2" /> Post Job Opening</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => ChangeTab("generalChat")}><FileText className="h-4 w-4 mr-2" /> General Chat</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => ChangeTab("profile")}><FileText className="h-4 w-4 mr-2" /> Profile</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => ChangeTab("subscribe")}><FileText className="h-4 w-4 mr-2" /> subscribe</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

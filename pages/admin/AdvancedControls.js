@@ -13,6 +13,7 @@ import NotificationSettings from "@/pages/admin/NotificationSettings";
 import FirestoreStorageDashboard from '@/pages/FirestoreDashboard';
 import ChatSettings from '@/pages/admin/ChatSettings';
 import TemporaryPasswordGenerator from "./GeneratePassword";
+import SendNotifications from "./SendNotification";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -147,6 +148,7 @@ if (loading) {
               <option value="userConfig">User Config</option>
               <option value="deleteChats">Delete Chats</option>
               <option value="tempPassword">Temporary Password</option>
+              <option value="sendNotification">Send Notifications</option>
             </select>
           </div>
 
@@ -169,6 +171,10 @@ if (loading) {
 
           {selectedSection === "tempPassword" && (
             <TemporaryPasswordGenerator users={allUsers1} />
+          )}
+
+          {selectedSection === "sendNotification" && (
+            <SendNotifications />
           )}
         </CardContent>
       </Card>
