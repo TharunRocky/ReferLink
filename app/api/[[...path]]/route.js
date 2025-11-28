@@ -14,6 +14,24 @@ const dbName = process.env.DB_NAME;
 
 let cachedClient = null;
 
+console.log("==== FIREBASE PRIVATE KEY DEBUG START ====");
+
+const key = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n");
+
+console.log("START:", JSON.stringify(key.slice(0, 80)));
+console.log("END:", JSON.stringify(key.slice(-80)));
+
+console.log("Has real newline:", key.includes("\n"));
+console.log("Has literal \\n:", key.includes("\\n"));
+
+console.log("Length:", key.length);
+
+console.log("First line:", JSON.stringify(key.split("\n")[0]));
+console.log("Last line:", JSON.stringify(key.split("\n").slice(-1)[0]));
+
+console.log("==== FIREBASE PRIVATE KEY DEBUG END ====");
+
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
