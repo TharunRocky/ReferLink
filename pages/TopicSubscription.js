@@ -13,19 +13,7 @@ export default function UserTopicSubscribe() {
 
   
     const { generateToken } = useFcmToken();
-  
-    // const handleSubscribe = async () => {
-    //   const token = await generateToken();
-    //   if (!token) return;
-  
-    //   await fetch("/api/subscribe", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({ token, topic: "news" }),
-    //   });
-  
-    //   alert("Subscribed to topic: news");
-    // };
+
   const handleSubscribe = async () => {
     if (!topic) {
       toast.error("Please select a topic");
