@@ -48,6 +48,20 @@ export default function App() {
     if (tab) {
       setCurrentTab(tab);
     }
+
+    if (!messaging) return;
+
+    onMessage(messaging, (payload) => {
+     const data =payload.data;
+     if(Notification.permission === "granted"){
+      new Notification(data.title, {
+        body: data.body,
+        icon: "/icons/icon-512x512.png",
+        image:data.image,
+        data: {url: data.url}
+      });
+     }
+    });
   }, [status]);
     
   const jobOpenings = useJobsOpenings();

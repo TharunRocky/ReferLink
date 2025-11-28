@@ -21,6 +21,16 @@ if (!admin.apps.length) {
 });
 }
 
+// if (!admin.apps.length) {
+//   admin.initializeApp({
+//     credential: admin.credential.cert({
+//       projectId: process.env.FIREBASE_PROJECT_ID,
+//       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+//       privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+//     })
+//   });
+// }
+
 async function connectToDatabase() {
   if (cachedClient) {
     return cachedClient;
@@ -368,12 +378,15 @@ export async function POST(request, { params }) {
 
      // SEND MESSAGE
     if(path === 'sendTopic'){
-      const { topic, title,msg } = body;
+      const { topic, title,content } = body;
 
+      const image="https://referlink.space/icons/icon-512x512.png";
+      const url= "https://referlink.space";
+      console.log(topic,title,content,image,url);
       try {
         const response = await admin.messaging().send({
           topic,
-          notification: { title, body:msg },
+          data: { title, body:content,image, url },
         });
 
         return Response.json({message:"Message sent"},{status:200});
