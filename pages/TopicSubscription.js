@@ -99,6 +99,9 @@ export default function UserTopicSubscribe() {
             <SelectItem value="news">News</SelectItem>
             <SelectItem value="offers">Offers</SelectItem>
             <SelectItem value="alerts">Alerts</SelectItem>
+            <SelectItem value="jobRequests">Job Requests</SelectItem>
+            <SelectItem value="jobOpenings">Job Openings</SelectItem>
+            
           </SelectContent>
         </Select>
 

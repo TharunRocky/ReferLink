@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-
+import { sendTopicNotification } from "@/lib/sendTopicMessages";
 
 export default function PostJobRequestPage({session, ChangeTab}) {
   const [isLoading, setIsLoading] = useState(false);
@@ -58,8 +58,17 @@ export default function PostJobRequestPage({session, ChangeTab}) {
         body: JSON.stringify(formData),
     })
       toast.success("Job request posted successfully!",res);
+
+      //Notify all subscribed users
+      await sendTopicNotification({
+          topic: "jobRequests",
+          title: "New Job Posted!",
+          content: `${formData.title} is now available`,
+      });
+
       ChangeTab("home");
     } catch (error) {
+      console.log(error);
       toast.error(error.response?.data?.detail || "Failed to post job request");
     } finally {
       setIsLoading(false);

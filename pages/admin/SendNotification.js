@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { sendTopicNotification } from "@/lib/sendTopicMessages";
 
 export default function SendNotifications() {
   const [topic, setTopic] = useState("");
@@ -18,24 +19,13 @@ export default function SendNotifications() {
       return;
     }
 
-    try {
-      const res = await fetch("/api/sendTopic", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic, title, content }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        toast.success(data.message || "Notification sent!");
-        setTitle("");
-        setContent("");
-      } else {
-        toast.error("Failed to send notification");
-      }
-    } catch (err) {
-      toast.error("Error sending notification");
+    const { ok, data } = await sendTopicNotification({ topic, title, content });
+    if (ok) {
+      toast.success(data.message || "Notification sent!");
+      setTitle("");
+      setContent("");
+    } else {
+      toast.error("Failed to send notification");
     }
   };
 
@@ -55,6 +45,8 @@ export default function SendNotifications() {
             <SelectItem value="news">News</SelectItem>
             <SelectItem value="offers">Offers</SelectItem>
             <SelectItem value="alerts">Alerts</SelectItem>
+            <SelectItem value="jobRequests">Job Requests</SelectItem>
+            <SelectItem value="jobOpenings">Job Openings</SelectItem>
           </SelectContent>
         </Select>
 

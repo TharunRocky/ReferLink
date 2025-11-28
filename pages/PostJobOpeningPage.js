@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { X } from "lucide-react";
+import { sendTopicNotification } from "@/lib/sendTopicMessages";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -62,6 +63,14 @@ export default function PostJobOpeningPage({session, ChangeTab}) {
         body: JSON.stringify(formData),
     })
       toast.success("Job opening posted successfully!");
+
+      //Notify all subscribed users
+      await sendTopicNotification({
+        topic: "jobOpenings",
+        title: "New Job Posted!",
+        content: `${formData.title} is now available`,
+      });
+
       ChangeTab("home");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Failed to post job opening");
