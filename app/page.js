@@ -25,6 +25,8 @@ import GeneralChat from '@/pages/GeneralChat';
 import useChats from '@/hooks/useChats';
 import ProfileUpdateCard from '@/pages/ProfileUpdate';
 import AdvancedControls from '@/pages/admin/AdvancedControls';
+import { messaging, onMessage } from "@/lib/firebase/firebase";
+import UserTopicSubscribe from '@/pages/TopicSubscription';
 
 export default function App() {
   const { data: session, status } = useSession();
@@ -164,6 +166,9 @@ export default function App() {
       )}
       {currentTab === "advancedControls" && (
         <AdvancedControls />
+      )}
+      {currentTab === "subscribe" && (
+        <UserTopicSubscribe />
       )}
     </div>
   );

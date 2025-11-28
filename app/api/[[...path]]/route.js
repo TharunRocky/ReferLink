@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { subBusinessDays } from 'date-fns';
 import { Dumbbell } from 'lucide-react';
+import admin from "firebase-admin";
 import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest, postMessage, DeleteChatsRange} from '@/lib/firebase/firebaseClient';
 
 
@@ -12,6 +13,16 @@ const uri = process.env.MONGO_URL;
 const dbName = process.env.DB_NAME;
 
 let cachedClient = null;
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+    }),
+  });
+}
 
 async function connectToDatabase() {
   if (cachedClient) {
@@ -357,6 +368,35 @@ export async function POST(request, { params }) {
       return Response.json({message:"Failed to delete chats"},{status:500});
     }
 
+
+     // SEND MESSAGE
+    if(path === 'sendTopic'){
+      const { topic, title,msg } = body;
+
+      try {
+        const response = await admin.messaging().send({
+          topic,
+          notification: { title, body:msg },
+        });
+
+        return Response.json({message:"Message sent"},{status:200});
+      } catch (error) {
+        console.error("Error sending topic message:", error);
+         return Response.json({message:"Message sent failed"},{status:500});
+      }
+    }
+
+    //Subscribe
+    if(path === 'subscribe'){
+      const { token, topic } = body;
+      
+        try {
+          await admin.messaging().subscribeToTopic(token, topic);
+          return Response.json({message:"Subscribed successfully"},{status:200});
+        } catch (error) {
+         return Response.json({message:"Failed to subscribe"},{status:500});
+        }
+    }
 
     // ADMIN: REJECT USER
     if (path === 'admin/reject-user') {
