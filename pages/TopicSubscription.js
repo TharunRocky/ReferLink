@@ -9,28 +9,6 @@ import { useFcmToken } from "@/hooks/useFCMToken";
 export default function UserTopicSubscribe() {
   const [topic, setTopic] = useState("");
 
-  // const requestToken = async () => {
-  //   try {
-  //     const permission = await Notification.requestPermission();
-  //     if (permission !== "granted") {
-  //       toast.error("Please enable notifications to subscribe.");
-  //       return null;
-  //     }
-
-  //     // Get FCM token from your firebase client code
-  //     const { getToken, messaging } = await import("../utils/firebase");
-
-  //     const token = await getToken(messaging, {
-  //       vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
-  //     });
-
-  //     return token;
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Unable to get device token");
-  //     return null;
-  //   }
-  // };
 
 
   
