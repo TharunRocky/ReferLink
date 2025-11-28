@@ -14,6 +14,15 @@ const dbName = process.env.DB_NAME;
 
 let cachedClient = null;
 
+console.log("=== DEPLOYED PRIVATE KEY CHECK ===");
+console.log(JSON.stringify(process.env.FIREBASE_PRIVATE_KEY, null, 2));
+console.log("LENGTH:", process.env.FIREBASE_PRIVATE_KEY?.length);
+console.log("HAS NEWLINES:", process.env.FIREBASE_PRIVATE_KEY?.includes("\n"));
+console.log("FIRST 40:", process.env.FIREBASE_PRIVATE_KEY?.slice(0, 40));
+console.log("LAST 40:", process.env.FIREBASE_PRIVATE_KEY?.slice(-40));
+console.log("=== END ===");
+
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
