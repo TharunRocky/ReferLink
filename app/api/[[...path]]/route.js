@@ -408,6 +408,17 @@ export async function POST(request, { params }) {
         }
     }
 
+    if(path === 'unsubscribe'){
+      const { token, topic } = body;
+      try {
+      await admin.messaging().unsubscribeFromTopic(token, topic);
+      return Response.json({ success: true });
+    } catch (err) {
+      return Response.json({ error: err.message }, { status: 500 });
+        }
+    }
+    
+
     // ADMIN: REJECT USER
     if (path === 'admin/reject-user') {
       const currentUser = await getCurrentUser(request);

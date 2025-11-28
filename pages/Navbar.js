@@ -20,6 +20,7 @@ import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import MobileSidebar from "@/components/ui/MobileSidebar";
 import { useFcmToken } from "@/hooks/useFCMToken";
+import { unsubscribeFromAllTopics } from "@/hooks/unsubscribeFromAllTopics";
 
 export default function Navbar({ session, status, ChangeTab, tab }) {
   if (!session) return null;
@@ -68,9 +69,13 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
     alert("Subscribed to topic: news");
   };
 
-  /* --------------------------------------------------------
-     DESKTOP SCROLL — Close when at top & scrolling DOWN
-  -------------------------------------------------------- */
+  const handleLogout = async () => {
+    await unsubscribeFromAllTopics(generateToken);
+
+    signOut();
+  };
+
+
   const handleWheel = (e) => {
     const el = notifScrollRef.current;
     if (!el) return;
@@ -252,7 +257,7 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
                 )}
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut}><LogOut className="h-4 w-4 mr-2" /> Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}><LogOut className="h-4 w-4 mr-2" /> Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
