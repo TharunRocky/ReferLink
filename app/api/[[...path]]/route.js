@@ -14,23 +14,11 @@ const dbName = process.env.DB_NAME;
 
 let cachedClient = null;
 
-console.log("=== DEPLOYED PRIVATE KEY CHECK ===");
-console.log(JSON.stringify(process.env.FIREBASE_PRIVATE_KEY, null, 2));
-console.log("LENGTH:", process.env.FIREBASE_PRIVATE_KEY?.length);
-console.log("HAS NEWLINES:", process.env.FIREBASE_PRIVATE_KEY?.includes("\n"));
-console.log("FIRST 40:", process.env.FIREBASE_PRIVATE_KEY?.slice(0, 40));
-console.log("LAST 40:", process.env.FIREBASE_PRIVATE_KEY?.slice(-40));
-console.log("=== END ===");
-
-
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-    }),
-  });
+ admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 }
 
 async function connectToDatabase() {
