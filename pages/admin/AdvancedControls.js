@@ -24,6 +24,8 @@ export default function AdvancedControls() {
   const [updated,setUpdated] = useState(true);
   const [loading, setLoading] = useState(true);
   const [selectedSection, setSelectedSection] = useState("notifications");
+  const [selectedCompany, setSelectedCompany] = useState(null);
+
 
 
   useEffect(() => {
@@ -46,6 +48,9 @@ export default function AdvancedControls() {
         fetchUsers();
   }, [updated]);
 
+  const companyList = [...new Set(allUsers.map(u => u.company).filter(Boolean))];
+
+
 if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -55,58 +60,7 @@ if (loading) {
   }
 
   return (
-    // <div className="max-w-7xl mx-auto px-4 py-8">
-    //   <div className="mb-8">
-    //     <h1 className="text-4xl font-bold text-gray-900 mb-2">Advanced Controls</h1>
-    //     <p className="text-gray-600">Platform Usage Management</p>
-    //   </div>
 
-
-    //   <Tabs defaultValue="settings" className="w-full">
-    //     <TabsList className="grid w-full grid-cols-2 mb-6">
-    //         <TabsTrigger value="settings">Settings</TabsTrigger>
-    //         <TabsTrigger value="firestore">Usage</TabsTrigger>
-    //     </TabsList>
-    //   <TabsContent value="settings">
-    //     <Card>
-    //       <CardHeader>
-    //         <CardTitle>Admin Settings</CardTitle>
-    //         <CardDescription>Manage notifications and user configurations</CardDescription>
-    //       </CardHeader>
-    //       <CardContent>
-
-    //         {/* --- NOTIFICATION DELETE BLOCK --- */}
-    //           <NotificationSettings />
-
-    //         {/* --- USER CONFIG BLOCK --- */}
-    //           <UserConfigSettings allUsers={allUsers} setUpdated={setUpdated}/>
-
-    //         {/* --- DELETE CHAT BLOCK --- */}
-    //           <ChatSettings/>
-
-    //         {/* --- Generate Temporary Password --- */}
-    //         <TemporaryPasswordGenerator users={allUsers1}/>
-
-    //       </CardContent>
-    //     </Card>
-    //   </TabsContent>
-
-    //   <TabsContent value="firestore">
-    //     <Card>
-    //       <CardHeader>
-    //         <CardTitle>Analytics</CardTitle>
-    //         <CardDescription>Storage and Network Usage</CardDescription>
-    //       </CardHeader>
-    //       <CardContent>
-
-    //         <FirestoreStorageDashboard />
-    //       </CardContent>
-    //     </Card>
-    //   </TabsContent>
-
-
-    //   </Tabs>
-    // </div>
     <div className="max-w-7xl mx-auto px-4 py-8">
   <div className="mb-8">
     <h1 className="text-4xl font-bold text-gray-900 mb-2">Advanced Controls</h1>
@@ -116,7 +70,7 @@ if (loading) {
   <Tabs defaultValue="settings" className="w-full">
     <TabsList className="grid w-full grid-cols-2 mb-6">
       <TabsTrigger value="settings">Settings</TabsTrigger>
-      <TabsTrigger value="firestore">Usage</TabsTrigger>
+      <TabsTrigger value="company">Company</TabsTrigger>
     </TabsList>
 
     {/* SETTINGS TAB */}
@@ -179,6 +133,78 @@ if (loading) {
         </CardContent>
       </Card>
     </TabsContent>
+
+    {/* COMPANY TAB */}
+<TabsContent value="company">
+  <Card>
+    <CardHeader>
+      <CardTitle>Companies</CardTitle>
+      <CardDescription>
+        View companies and the users working in them
+      </CardDescription>
+    </CardHeader>
+
+    <CardContent>
+      {/* List of Companies */}
+      {!selectedCompany && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {companyList.length === 0 && (
+            <p>No companies found.</p>
+          )}
+
+          {companyList.map((company) => (
+            <Card
+              key={company}
+              className="p-4 cursor-pointer hover:bg-gray-100 transition"
+              onClick={() => setSelectedCompany(company)}
+            >
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Briefcase size={18} /> {company}
+              </CardTitle>
+              <CardDescription>
+                {
+                  allUsers.filter((u) => u.company === company).length
+                }{" "}
+                Users
+              </CardDescription>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Users in Selected Company */}
+      {selectedCompany && (
+        <div>
+          <Button
+            variant="secondary"
+            className="mb-4"
+            onClick={() => setSelectedCompany(null)}
+          >
+            ← Back to Companies
+          </Button>
+
+          <h2 className="text-xl font-semibold mb-3">
+            Users in {selectedCompany}
+          </h2>
+
+          {allUsers
+            .filter((u) => u.company === selectedCompany)
+            .map((user) => (
+              <Card key={user.id} className="p-4 mb-3">
+                <CardTitle className="flex items-center gap-2">
+                  <Users size={18} /> {user.username}
+                </CardTitle>
+                <CardDescription>
+                  Email: {user.email || "N/A"}
+                </CardDescription>
+              </Card>
+            ))}
+        </div>
+      )}
+    </CardContent>
+  </Card>
+</TabsContent>
+
 
     {/* FIRESTORE TAB */}
     <TabsContent value="firestore">

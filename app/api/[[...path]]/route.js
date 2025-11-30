@@ -538,7 +538,7 @@ export async function GET(request, { params }) {
       }
 
       const users = await db.collection('users')
-        .find({}, { projection: { email: 1, _id:0, fullName:1, status:1, role:1 } })
+        .find({}, { projection: { email: 1, _id:0, fullName:1, status:1, role:1, company:1 } })
         .sort({ createdAt: -1 })
         .toArray();
 
