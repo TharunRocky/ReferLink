@@ -72,7 +72,7 @@ export default function Page() {
             num="01"
             title="Are you looking for a job?"
             description="Create a clean and compelling job request highlighting your experience, skills, and preferred roles. Your request becomes discoverable to verified professionals who can refer you internally."
-            video="/Feature1.mp4"
+            // video="/Feature1.mp4"
             reverse={false}
           />
 
@@ -80,7 +80,7 @@ export default function Page() {
             num="02"
             title="Are you a working professional? Looking for passive income?"
             description="Browse job requests posted by candidates, filter by skills or experience, and submit internal referrals effortlessly. Earn passive rewards while helping talent find opportunities."
-            video="/Feature2.mp4"
+            // video="/Feature2.mp4"
             reverse={true}
           />
 
@@ -88,7 +88,7 @@ export default function Page() {
             num="03"
             title="Smart Notifications"
             description="Stay updated with personalized notifications — whether you're watching job seekers, job openings, or new community activity. Never miss an opportunity relevant to you."
-            video="/Feature3.mp4"
+            // video="/Feature3.mp4"
             reverse={false}
           />
 
@@ -96,7 +96,7 @@ export default function Page() {
             num="04"
             title="Community Chat & Collaboration"
             description="Join a private community space where candidates and professionals discuss roles, share insights, and support each other — all in a safe, respectful environment."
-            video="/Feature4.mp4"
+            // video="/Feature4.mp4"
             reverse={true}
           />
 
