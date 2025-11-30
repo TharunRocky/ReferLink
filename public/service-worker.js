@@ -1,6 +1,6 @@
 
-const CACHE_NAME = 'site-static-v4';
-const API_CACHE = 'api-cache-v4';
+const CACHE_NAME = 'site-static-v5';
+const API_CACHE = 'api-cache-v5';
 // const NETWORK_TIMEOUT = 3000;
 const assets =[
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
@@ -10,6 +10,10 @@ const assets =[
     '/offline.html',
     '/hero.jpg',
     'icons/logo.png',
+    '/Feature1.mp4',
+    '/Feature2.mp4',
+    '/Feature3.mp4',
+    '/Feature4.mp4',
 ];
 
 const apiData = [

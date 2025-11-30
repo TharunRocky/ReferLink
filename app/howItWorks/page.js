@@ -2,7 +2,11 @@
 
 import { motion } from "framer-motion";
 import AnimatedVideoFrame from "./AnimatedVideoFrame";
+import { useState, useEffect } from "react";
 
+/* ------------------------
+   Animation Variants
+------------------------ */
 const container = {
   hidden: { opacity: 0, y: 10 },
   show: { opacity: 1, y: 0, transition: { staggerChildren: 0.12 } },
@@ -13,17 +17,71 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
+/* ------------------------
+   Navbar Component
+------------------------ */
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <motion.nav
+  initial={{ opacity: 0, y: -12 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+  className={`fixed top-0 left-0 w-full z-50 backdrop-blur-xl transition-all
+    ${scrolled 
+      ? "bg-white/70 shadow-[0_2px_8px_rgba(0,0,0,0.06)]" 
+      : "bg-white/10 border-b border-white/20"
+    }
+  `}
+>
+
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-500">
+          ReferLink
+        </a>
+
+        {/* Menu */}
+        <div className="flex items-center gap-6 text-sm font-medium">
+          <a href="/" className="text-slate-700 hover:text-slate-900 transition">
+            Home
+          </a>
+          <a href="/howItWorks" className="text-slate-700 hover:text-slate-900 transition">
+            How it Works
+          </a>
+          <a href="/login" className="rounded-full bg-slate-900 text-white px-4 py-2 shadow hover:brightness-110 transition">
+            Login
+          </a>
+        </div>
+      </div>
+    </motion.nav>
+  );
+}
+
+/* ------------------------
+   Main Page Component
+------------------------ */
 export default function Page() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900">
+
+      {/* ⬅️ New Navbar */}
+      <Navbar />
+
       {/* Hero */}
-      <header className="relative overflow-hidden">
+      <header className="relative overflow-hidden pt-32">
         <div className="absolute inset-0 pointer-events-none">
-          {/* subtle pattern / texture — optional SVG background */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-50/30 via-transparent to-transparent opacity-60" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-20">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -56,41 +114,38 @@ export default function Page() {
       <section id="features" className="max-w-7xl mx-auto px-6 lg:px-8 -mt-4 pb-24">
         <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} className="space-y-28">
 
-          {/* Feature 1 */}
           <FeatureStripe
             num="01"
             title="Are you looking for a job?"
             description="Create a clean and compelling job request highlighting your experience, skills, and preferred roles. Your request becomes discoverable to verified professionals who can refer you internally."
             video="/Feature1.mp4"
             reverse={false}
-            />
+          />
 
-          {/* Feature 2 */}
           <FeatureStripe
             num="02"
             title="Are you a working professional? Looking for passive income?"
             description="Browse job requests posted by candidates, filter by skills or experience, and submit internal referrals effortlessly. Earn passive rewards while helping talent find opportunities."
             video="/Feature2.mp4"
             reverse={true}
-            />
+          />
 
-          {/* Feature 3 */}
           <FeatureStripe
             num="03"
             title="Smart Notifications"
             description="Stay updated with personalized notifications — whether you're watching job seekers, job openings, or new community activity. Never miss an opportunity relevant to you."
             video="/Feature3.mp4"
             reverse={false}
-            />
+          />
 
-          {/* Feature 4 */}
           <FeatureStripe
             num="04"
             title="Community Chat & Collaboration"
             description="Join a private community space where candidates and professionals discuss roles, share insights, and support each other — all in a safe, respectful environment."
             video="/Feature4.mp4"
             reverse={true}
-            />
+          />
+
         </motion.div>
       </section>
 
@@ -108,26 +163,26 @@ export default function Page() {
           </div>
         </div>
       </footer>
+
     </main>
   );
 }
 
 /* ------------------------
    FeatureStripe Component
-   (Stripe-style, split layout)
-   ------------------------ */
+------------------------ */
 function FeatureStripe({ num, title, description, video, reverse = false }) {
   return (
     <motion.section
       variants={fadeUp}
-      className={`grid gap-10 items-center lg:grid-cols-2 max-w-6xl mx-auto ${reverse ? "lg:flex-row-reverse" : ""}`}
+      className={`grid gap-10 items-center lg:grid-cols-2 max-w-6xl mx-auto`}
     >
       {/* Left / Text */}
       <motion.div
         initial={{ opacity: 0, x: reverse ? 40 : -40 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.7 }}
-        className="px-2"
+        className={`px-2 ${reverse ? "lg:order-2" : "lg:order-1"}`}
       >
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center justify-center h-10 w-10 rounded-full bg-gradient-to-r from-indigo-600 to-teal-500 text-white font-semibold shadow">
@@ -140,33 +195,34 @@ function FeatureStripe({ num, title, description, video, reverse = false }) {
         <p className="mt-4 text-slate-600 max-w-xl">{description}</p>
 
         <ul className="mt-8 space-y-3 text-slate-700">
-          <motion.li initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.06 }} className="flex items-start gap-3">
-            <span className="mt-1 h-2 w-2 rounded-full bg-teal-500" />
-            <span>Smooth, private posting flow</span>
-          </motion.li>
-          <motion.li initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.12 }} className="flex items-start gap-3">
-            <span className="mt-1 h-2 w-2 rounded-full bg-indigo-500" />
-            <span>Fast discovery & referrals</span>
-          </motion.li>
-          <motion.li initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.18 }} className="flex items-start gap-3">
-            <span className="mt-1 h-2 w-2 rounded-full bg-sky-400" />
-            <span>Custom notifications & chat</span>
-          </motion.li>
+          {["Smooth, private posting flow", "Fast discovery & referrals", "Custom notifications & chat"].map((t, i) => (
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="flex items-start gap-3"
+            >
+              <span className="mt-1 h-2 w-2 rounded-full bg-indigo-500" />
+              <span>{t}</span>
+            </motion.li>
+          ))}
         </ul>
       </motion.div>
 
-      {/* Right / Video (animated frame) */}
+      {/* Right / Video */}
       <motion.div
         initial={{ opacity: 0, y: 12, scale: 0.98 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.7 }}
-        className="px-2"
+        className={`px-2 ${reverse ? "lg:order-1" : "lg:order-2"}`}
       >
         <div className="relative">
-          {/* Device badge / label */}
           <div className="absolute -top-6 right-6 z-10">
             <div className="inline-flex items-center gap-3 rounded-full bg-white/90 px-3 py-1 text-sm font-medium shadow ring-1 ring-white/60">
-              <svg className="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6l4 2" /></svg>
+              <svg className="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6l4 2" />
+              </svg>
               Live preview
             </div>
           </div>
