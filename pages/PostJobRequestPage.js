@@ -58,15 +58,12 @@ export default function PostJobRequestPage({session, ChangeTab}) {
         body: JSON.stringify(formData),
     })
       toast.success("Job request posted successfully!",res);
-       const data =await res.json();
-      const job_id=data.joRequest.id;
       const name=session.user.name.split(" ")[0];
       //Notify all subscribed users
       await sendTopicNotification({
           topic: "jobRequests",
           title: `${name} posted a New Job Request!`,
           content: `${formData.title}\n${formData.description}\n`,
-          jobId: `${job_id}`,
       });
 
       ChangeTab("home");

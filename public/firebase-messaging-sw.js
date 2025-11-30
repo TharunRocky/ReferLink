@@ -45,24 +45,17 @@ self.addEventListener("push", function (event) {
 self.addEventListener("notificationclick", function (event) {
   event.notification.close();
 
-  const data = event.notification.data.originalData || {};
-  const jobId = data.jobId;  
-  const targetUrl = "/?jobId=" + jobId;  // React will detect this and open popup
+  const url = event.notification.data.url;
 
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true })
       .then(windowClients => {
-
-        // If the app is already open → focus and send message
-        for (const client of windowClients) {
-          if (client.url.includes(self.location.origin)) {
-            client.postMessage({ type: "OPEN_JOB", jobId });
+        for (let client of windowClients) {
+          if (client.url === url && "focus" in client) {
             return client.focus();
           }
         }
-
-        // If app is closed → open a new window with jobId
-        return clients.openWindow(targetUrl);
+        return clients.openWindow(url);
       })
   );
 });
