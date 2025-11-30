@@ -380,9 +380,9 @@ export async function POST(request, { params }) {
     if(path === 'sendTopic'){
       const { topic, title,content } = body;
 
-      const image="https://referlink.space/icons/icon-512x512.png";
+      const image="https://referlink.space/icons/jobsearch.png";
       const url= "https://referlink.space";
-      console.log(topic,title,content,image,url);
+      // console.log(topic,title,content,image,url);
       try {
         const response = await admin.messaging().send({
           topic,

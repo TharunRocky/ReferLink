@@ -64,11 +64,12 @@ export default function PostJobOpeningPage({session, ChangeTab}) {
     })
       toast.success("Job opening posted successfully!");
 
+      const name=session.user.name.split(" ")[0];
       //Notify all subscribed users
       await sendTopicNotification({
         topic: "jobOpenings",
-        title: "New Job Posted!",
-        content: `${formData.title} is now available`,
+        title: `${name} posted a New Job Opening!`,
+        content: `${formData.title}\n${formData.description}\n`,
       });
 
       ChangeTab("home");
