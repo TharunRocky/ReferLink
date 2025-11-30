@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import AnimatedVideoFrame from "./AnimatedVideoFrame";
 import { useState, useEffect } from "react";
+import Navbar from "@/components/ui/HomeNavbar";
 
 /* ------------------------
    Animation Variants
@@ -17,53 +18,6 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
-/* ------------------------
-   Navbar Component
------------------------- */
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <motion.nav
-  initial={{ opacity: 0, y: -12 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
-  className={`fixed top-0 left-0 w-full z-50 backdrop-blur-xl transition-all
-    ${scrolled 
-      ? "bg-white/70 shadow-[0_2px_8px_rgba(0,0,0,0.06)]" 
-      : "bg-white/10 border-b border-white/20"
-    }
-  `}
->
-
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <a href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-500">
-          ReferLink
-        </a>
-
-        {/* Menu */}
-        <div className="flex items-center gap-6 text-sm font-medium">
-          <a href="/" className="text-slate-700 hover:text-slate-900 transition">
-            Home
-          </a>
-          <a href="/howItWorks" className="text-slate-700 hover:text-slate-900 transition">
-            How it Works
-          </a>
-          <a href="/login" className="rounded-full bg-slate-900 text-white px-4 py-2 shadow hover:brightness-110 transition">
-            Login
-          </a>
-        </div>
-      </div>
-    </motion.nav>
-  );
-}
 
 /* ------------------------
    Main Page Component
