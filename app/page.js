@@ -27,6 +27,7 @@ import ProfileUpdateCard from '@/pages/ProfileUpdate';
 import AdvancedControls from '@/pages/admin/AdvancedControls';
 import { messaging, onMessage } from "@/lib/firebase/firebase";
 import UserTopicSubscribe from '@/pages/TopicSubscription';
+import JobPopup from '@/pages/jobPopup';
 
 export default function App() {
   const { data: session, status } = useSession();
@@ -35,40 +36,70 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState([]);
   const [postUser, setPostUser] = useState("");
+  const [selectedJob, setSelectedJob] = useState(null);
+
    
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      // router.push('/login');
-      router.push('/howItWorks');
-    } 
-    else if(status === 'authenticated'){
-       fetchUser();
-    }
-    const tab = new URLSearchParams(window.location.search).get("tab");
-    if (tab) {
-      setCurrentTab(tab);
-    }
+useEffect(() => {
 
-    if (!messaging) return;
+  if (status === 'unauthenticated') {
+    router.push('/howItWorks');
+  } else if (status === 'authenticated') {
+    fetchUser();
+  }
 
-    onMessage(messaging, (payload) => {
-     const data =payload.data;
-     if(Notification.permission === "granted"){
+  const tab = new URLSearchParams(window.location.search).get("tab");
+  if (tab) setCurrentTab(tab);
+
+  const jobIdFromUrl = new URLSearchParams(window.location.search).get("jobId");
+  if (jobIdFromUrl) {
+    fetchAndOpenJobPopup(jobIdFromUrl);
+  }
+
+  if (!messaging) return;
+
+  onMessage(messaging, (payload) => {
+    const data = payload.data;
+
+    if (Notification.permission === "granted") {
       new Notification(data.title, {
         body: data.body,
         icon: "/icons/icon-512x512.png",
-        image:data.image,
-        data: {url: data.url}
+        image: data.image,
+        data: {
+          jobId: data.jobId,
+          url: data.url
+        }
       });
-     }
+    }
+  });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      if (event.data?.type === "OPEN_JOB") {
+        fetchAndOpenJobPopup(event.data.jobId);   // open popup
+      }
     });
-  }, [status]);
+  }
+
+}, [status]);
+
     
   const jobOpenings = useJobsOpenings();
   const jobRequests = useJobRequests();
   const messages = useChats();
 
+
+  function fetchAndOpenJobPopup(jobId) {
+  fetch(`/api/jobs?jobId=${jobId}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.jobOpening || data.job) {
+        setSelectedJob(data.jobOpening || data.job);
+      }
+    })
+    .catch(err => console.error("Error fetching job:", err));
+}
     const fetchUser = async()=> {
       setLoading(true);
       try {
@@ -185,6 +216,9 @@ export default function App() {
       {currentTab === "subscribe" && (
         <UserTopicSubscribe />
       )}
+      {selectedJob && (
+  <JobPopup job={selectedJob} onClose={() => setSelectedJob(null)} />
+)}
     </div>
   );
 }

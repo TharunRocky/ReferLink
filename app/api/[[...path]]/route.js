@@ -6,7 +6,7 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import { subBusinessDays } from 'date-fns';
 import { Dumbbell } from 'lucide-react';
 import admin from "firebase-admin";
-import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest, postMessage, DeleteChatsRange} from '@/lib/firebase/firebaseClient';
+import { postJobOpening, postJobRequest, deleteJobOpening, deleteJobRequest, postMessage, DeleteChatsRange, getJob} from '@/lib/firebase/firebaseClient';
 
 
 const uri = process.env.MONGO_URL;
@@ -244,7 +244,8 @@ export async function POST(request, { params }) {
         createdAt: new Date().toISOString(),
       };
 
-      await postJobOpening(jobOpening);
+      const res = await postJobOpening(jobOpening);
+      console.log(res);
       
 
       // Notify all approved users about new job opening
@@ -378,15 +379,17 @@ export async function POST(request, { params }) {
 
      // SEND MESSAGE
     if(path === 'sendTopic'){
-      const { topic, title,content } = body;
+      const { topic, title,content, jobId } = body;
+      console.log("Inside Sedn tOpics");
 
       const image="https://referlink.space/icons/jobsearch.png";
-      const url= "https://referlink.space";
+     const url= "https://referlink.space/?jobId="+jobId;
+     //const url="localhost:3000/?jobId="+jobId;
       // console.log(topic,title,content,image,url);
       try {
         const response = await admin.messaging().send({
           topic,
-          data: { title, body:content,image, url },
+          data: { title, body:content,image, url, job_id:String(jobId)},
         });
 
         return Response.json({message:"Message sent"},{status:200});
@@ -461,10 +464,18 @@ export async function GET(request, { params }) {
         const tempUser = await db.collection('users').findOne({email: postUser});
         const {password, ...userWithoutPassword } = tempUser;
          return Response.json(userWithoutPassword, { status: 200 });
-      
-      
-
     }
+
+    if (path === 'jobs') {
+      const currentUser = await getCurrentUser(request);
+      if (!currentUser) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      const jobId = searchParams.get('jobId');
+        const jobOpening = await getJob(jobId);
+         return Response.json(jobOpening, { status: 200 });
+    }
+
 
       //MARK INDIVIDUAL NOTIFICATION AS READ
     if(path === 'notifications/read'){
