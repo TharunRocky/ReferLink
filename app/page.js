@@ -39,7 +39,8 @@ export default function App() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/login');
+      // router.push('/login');
+      router.push('/howItWorks');
     } 
     else if(status === 'authenticated'){
        fetchUser();
