@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import InstallAppButton from '@/pages/InstallAppButton';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -49,9 +48,6 @@ export default function Navbar() {
               How it Works
             </a>
 
-            {/* Install App Button */}
-            <InstallAppButton />
-
             <a
               href="/login"
               className="rounded-full px-5 py-2 bg-slate-900 text-white shadow hover:brightness-110 transition"
@@ -89,10 +85,6 @@ export default function Navbar() {
               <a href="/howItWorks" onClick={() => setOpen(false)} className="text-slate-700">
                 How it Works
               </a>
-
-              {/* Install Button in Mobile */}
-              <InstallAppButton />
-
               <a
                 href="/login"
                 onClick={() => setOpen(false)}

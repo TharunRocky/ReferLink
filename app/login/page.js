@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import Navbar from "@/components/ui/HomeNavbar";
+import InstallAppButton from "@/pages/InstallAppButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -321,6 +322,7 @@ export default function LoginPage() {
                 </Tabs>
               </CardContent>
             </Card>
+            <InstallAppButton />
           </motion.div>
         </div>
       </div>
