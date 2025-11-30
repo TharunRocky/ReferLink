@@ -695,7 +695,7 @@ function JobList({ items, session, handleDelete, ChangeTab, ChangeProfile, type 
           </CardHeader>
 
           <CardContent>
-            <p className="text-slate-700 mb-3">{job.description}</p>
+            <p className="text-gray-600 mb-4">{job.description}</p>
 
             <div className="flex gap-5 text-sm text-slate-600 mb-3">
               <div className="flex items-center gap-1">
@@ -714,8 +714,9 @@ function JobList({ items, session, handleDelete, ChangeTab, ChangeProfile, type 
               ))}
             </div>
 
+            <div className="mt-4 flex justify-end">
             <Button
-              className="w-full"
+              variant="default"
               onClick={() => {
                 ChangeTab("postProfile");
                 ChangeProfile(job.email);
@@ -723,6 +724,7 @@ function JobList({ items, session, handleDelete, ChangeTab, ChangeProfile, type 
             >
               View Profile
             </Button>
+            </div>
           </CardContent>
         </Card>
       ))}
