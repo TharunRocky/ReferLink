@@ -57,22 +57,28 @@ export default function PostJobOpeningPage({session, ChangeTab}) {
 
     setIsLoading(true);
     try {
-    await fetch('/api/job-openings',{
+    const res = await fetch('/api/job-openings',{
         method : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
     })
-      toast.success("Job opening posted successfully!");
+    const data =await res.json();
+    const job_id=data.jobOpening.id;
+    toast.success("Job opening posted successfully!");
 
       const name=session.user.name.split(" ")[0];
+      //const name="testUser";
+      console.log("Topic api"); 
       //Notify all subscribed users
       await sendTopicNotification({
         topic: "jobOpenings",
         title: `${name} posted a New Job Opening!`,
         content: `${formData.title}\n${formData.description}\n`,
+        jobId: `${job_id}`,
       });
 
       ChangeTab("home");
+
     } catch (error) {
       toast.error(error.response?.data?.detail || "Failed to post job opening");
     } finally {
