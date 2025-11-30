@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import InstallAppButton from '@/pages/InstallAppButton';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,7 +17,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* NAVBAR */}
       <motion.nav
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -29,7 +29,6 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-          {/* LOGO */}
           <a
             href="/"
             className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-500"
@@ -42,12 +41,17 @@ export default function Navbar() {
             <a href="/" className="text-slate-700 hover:text-slate-900 transition">
               Home
             </a>
+
             <a
               href="/howItWorks"
               className="text-slate-700 hover:text-slate-900 transition"
             >
               How it Works
             </a>
+
+            {/* Install App Button */}
+            <InstallAppButton />
+
             <a
               href="/login"
               className="rounded-full px-5 py-2 bg-slate-900 text-white shadow hover:brightness-110 transition"
@@ -77,24 +81,22 @@ export default function Navbar() {
             className="md:hidden fixed top-16 left-0 w-full bg-white shadow-lg z-40"
           >
             <div className="flex flex-col px-6 py-4 text-base font-medium gap-4">
-              <a
-                href="/"
-                onClick={() => setOpen(false)}
-                className="text-slate-700 hover:text-slate-900 transition"
-              >
+
+              <a href="/" onClick={() => setOpen(false)} className="text-slate-700">
                 Home
               </a>
-              <a
-                href="/howItWorks"
-                onClick={() => setOpen(false)}
-                className="text-slate-700 hover:text-slate-900 transition"
-              >
+
+              <a href="/howItWorks" onClick={() => setOpen(false)} className="text-slate-700">
                 How it Works
               </a>
+
+              {/* Install Button in Mobile */}
+              <InstallAppButton />
+
               <a
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="rounded-full px-5 py-2 bg-slate-900 text-white shadow hover:brightness-110 transition w-fit"
+                className="rounded-full px-5 py-2 bg-slate-900 text-white shadow w-fit"
               >
                 Login
               </a>
