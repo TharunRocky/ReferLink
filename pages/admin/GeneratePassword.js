@@ -80,7 +80,7 @@ export default function TemporaryPasswordGenerator({ users }) {
               <CommandEmpty>No users found.</CommandEmpty>
 
               <CommandGroup>
-                {users.map((u) => (
+                {users && users.map((u) => (
                   <CommandItem
                     key={u.email}
                     value={u.email}
