@@ -43,7 +43,7 @@ export default function Navbar() {
             </a>
 
             <a
-              href="/howItWorks"
+              href="/how-it-works"
               className="text-slate-700 hover:text-slate-900 transition"
             >
               How it Works

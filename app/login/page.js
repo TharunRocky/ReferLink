@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useSession } from 'next-auth/react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Lock } from "lucide-react";
@@ -27,10 +28,15 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/ui/HomeNavbar";
 
 export default function LoginPage() {
+   const { data: session, status } = useSession();
   const router = useRouter();
+  if (status === 'authenticated') {
+      router.replace('/');
+    } 
   const [isLoading, setIsLoading] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [issue, setIssue] = useState({ issueSubject: "", issueDesc: "" });
+ 
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -48,6 +54,12 @@ export default function LoginPage() {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
+
+  //  useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     router.replace('/');
+  //   } 
+  // }, [status]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
