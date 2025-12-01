@@ -43,6 +43,11 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
     document.body.style.overflow = notifOpen ? "hidden" : "auto";
   }, [notifOpen]);
 
+  const navigateTo = (tab) => {
+    ChangeTab(tab);
+    window.history.pushState({ tab }, "");
+  };
+
   const fetchNotifications = async () => {
     try {
       const res = await fetch('/api/notifications');
@@ -176,16 +181,16 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
             </p>
 
             <div className="hidden md:flex space-x-1">
-              <Button onClick={() => ChangeTab("home")} variant={tab === "home" ? "default" : "ghost"}>Home</Button>
-              <Button onClick={() => ChangeTab("my-posts")} variant={tab === "my-posts" ? "default" : "ghost"}>My Posts</Button>
+              <Button onClick={() => navigateTo("home")} variant={tab === "home" ? "default" : "ghost"}>Home</Button>
+              <Button onClick={() => navigateTo("my-posts")} variant={tab === "my-posts" ? "default" : "ghost"}>My Posts</Button>
 
               {session.user.role === "ADMIN" && (
                 <>
-                  <Button onClick={() => ChangeTab("admin")} variant={tab === "admin" ? "default" : "ghost"}>
+                  <Button onClick={() => navigateTo("admin")} variant={tab === "admin" ? "default" : "ghost"}>
                     <LayoutDashboard className="h-4 w-4 mr-2" /> Admin
                   </Button>
 
-                  <Button onClick={() => ChangeTab("advancedControls")} variant={tab === "advancedControls" ? "default" : "ghost"}>
+                  <Button onClick={() => navigateTo("advancedControls")} variant={tab === "advancedControls" ? "default" : "ghost"}>
                     <LayoutDashboard className="h-4 w-4 mr-2" /> Advanced
                   </Button>
                 </>
@@ -203,11 +208,11 @@ export default function Navbar({ session, status, ChangeTab, tab }) {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => ChangeTab("postRequest")}><FileText className="h-4 w-4 mr-2" /> Post Job Request</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => ChangeTab("postOpening")}><FileText className="h-4 w-4 mr-2" /> Post Job Opening</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => ChangeTab("generalChat")}><FileText className="h-4 w-4 mr-2" /> General Chat</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => ChangeTab("profile")}><FileText className="h-4 w-4 mr-2" /> Profile</DropdownMenuItem>
-                   <DropdownMenuItem onClick={() => ChangeTab("subscribe")}><FileText className="h-4 w-4 mr-2" /> subscribe</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateTo("postRequest")}><FileText className="h-4 w-4 mr-2" /> Post Job Request</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateTo("postOpening")}><FileText className="h-4 w-4 mr-2" /> Post Job Opening</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateTo("generalChat")}><FileText className="h-4 w-4 mr-2" /> General Chat</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateTo("profile")}><FileText className="h-4 w-4 mr-2" /> Profile</DropdownMenuItem>
+                   <DropdownMenuItem onClick={() => navigateTo("subscribe")}><FileText className="h-4 w-4 mr-2" /> subscribe</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

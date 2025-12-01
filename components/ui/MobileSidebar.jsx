@@ -37,6 +37,11 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
     fetchNotifications();
   }, []);
 
+  const navigateTo = (tab) => {
+    ChangeTab(tab);
+    window.history.pushState({ tab }, "");
+  };
+
   const fetchNotifications = async () => {
     try {
       const res = await fetch("/api/notifications");
@@ -86,7 +91,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
             variant={tab === "home" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              ChangeTab("home");
+              navigateTo("home");
               setOpen(false);
             }}
           >
@@ -98,7 +103,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
             variant={tab === "my-posts" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              ChangeTab("my-posts");
+              navigateTo("my-posts");
               setOpen(false);
             }}
           >
@@ -111,7 +116,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
               variant={tab === "admin" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
-                ChangeTab("admin");
+                navigateTo("admin");
                 setOpen(false);
               }}
             >
@@ -124,7 +129,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
               variant={tab === "advancedControls" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
-                ChangeTab("advancedControls");
+                navigateTo("advancedControls");
                 setOpen(false);
               }}
             >
@@ -142,7 +147,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
             variant={tab === "postRequest" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              ChangeTab("postRequest");
+              navigateTo("postRequest");
               setOpen(false);
             }}
           >
@@ -154,7 +159,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
             variant={tab === "postOpening" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              ChangeTab("postOpening");
+              navigateTo("postOpening");
               setOpen(false);
             }}
           >
@@ -171,7 +176,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
             variant={tab === "generalChat" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              ChangeTab("generalChat");
+              navigateTo("generalChat");
               setOpen(false);
             }}
           >
@@ -185,7 +190,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
             variant={tab === "subscribe" ? "default" : "ghost"}
             className="w-full justify-start"
             onClick={() => {
-              ChangeTab("subscribe");
+              navigateTo("subscribe");
               setOpen(false);
             }}
           >
@@ -201,7 +206,7 @@ export default function MobileSidebar({ session, ChangeTab, tab }) {
               variant={tab === "profile" ? "default" : "ghost"}
               className="w-full justify-start"
               onClick={() => {
-                ChangeTab("profile");
+                navigateTo("profile");
                 setOpen(false);
               }}
             >

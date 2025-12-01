@@ -39,7 +39,6 @@ export default function App() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      // router.push('/login');
       router.push('/how-it-works');
     } 
     else if(status === 'authenticated'){
@@ -64,6 +63,17 @@ export default function App() {
      }
     });
   }, [status]);
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state?.tab) {
+        setCurrentTab(event.state.tab);
+      } 
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
     
   const jobOpenings = useJobsOpenings();
   const jobRequests = useJobRequests();
