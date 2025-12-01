@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Head from "next/head";
 import {
   Card,
   CardContent,
@@ -54,12 +55,6 @@ export default function LoginPage() {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
-
-  //  useEffect(() => {
-  //   if (status === 'authenticated') {
-  //     router.replace('/');
-  //   } 
-  // }, [status]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -145,6 +140,31 @@ export default function LoginPage() {
 
   return (
     <>
+    <Head>
+  <title>Login – Referlink</title>
+
+  <link rel="canonical" href="https://referlink.space/login" />
+
+  <script
+    key="login-jsonld"
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Login",
+        "url": "https://referlink.space/login",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Referlink",
+          "url": "https://referlink.space"
+        }
+      }),
+    }}
+  />
+</Head>
+
+    
       <Navbar />
 
       {/* SEPARATOR */}
