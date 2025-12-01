@@ -12,8 +12,9 @@ export const metadata = {
   manifest: "/manifest.json",
   theme_color: "#000000",
   icons: {
-    icon : "/icons/icon-192x192.png",
-    apple: "/icons/icon-192x192.png",
+    icon : "/icons/favicon.ico",
+    shortcut : "icons/favicon.ico",
+    apple: "/icons/apple-touch-icon.png",
   }
 };
 
@@ -22,17 +23,18 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="canonical" href="https://www.referlink.space" />
         <link rel="icon" href="/icons/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
         <meta name="theme-color" content="#ffffff"/>
         <meta name="mobile-web-app-capable" content="yes"/>
         <meta name="application-name" content="ReferLink"/>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"/>
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a"/>
+
         <meta property="og:title" content="ReferLink - Private Job Referral Platform" />
         <meta property="og:description" content="connect, Share job opportuniites, and request referrals in a trusted communinty."/>
         <meta property="og:image" content="https://www.referlink.space/icons/logo.png" />

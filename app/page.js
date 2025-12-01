@@ -27,6 +27,7 @@ import ProfileUpdateCard from '@/pages/ProfileUpdate';
 import AdvancedControls from '@/pages/admin/AdvancedControls';
 import { messaging, onMessage } from "@/lib/firebase/firebase";
 import UserTopicSubscribe from '@/pages/TopicSubscription';
+import Head from 'next/head';
 
 export default function App() {
   const { data: session, status } = useSession();
@@ -69,6 +70,9 @@ export default function App() {
       if (event.state?.tab) {
         setCurrentTab(event.state.tab);
       } 
+      else{
+        setCurrentTab("home");
+      }
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -163,38 +167,63 @@ export default function App() {
   }
 
   return (
+    <>
+    <Head>
+  <title>Referlink – Home</title>
+
+  <link rel="canonical" href="https://referlink.space/" />
+
+  <script
+    key="home-jsonld"
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Referlink Home",
+        "url": "https://referlink.space/",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Referlink",
+          "url": "https://referlink.space"
+        }
+      }),
+    }}
+  />
+</Head>
+
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <Navbar session={session} status={status} tab={currentTab} ChangeTab={setCurrentTab} />
-      {currentTab === "my-posts" && (
-        <MyPostsPage  session={session} jobRequests={jobRequests} jobOpenings={jobOpenings}/>
-      )}
-      {currentTab === "home" && (
-        <HomePage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} ChangeTab={setCurrentTab} ChangeProfile={setPostUser}/>
-      )}
-      {currentTab === "admin" && (
-        <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} />
-      )}
-      {currentTab === "postOpening" && (
-       <PostJobOpeningPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
-      )}
-      {currentTab === "postRequest" && (
-        <PostJobRequestPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
-      )}
-      {currentTab === "generalChat" && (
-        <GeneralChat session={session} messages={messages}/>
-      )}
-      {currentTab === "profile" && (
-        <ProfileUpdateCard session={session} userProfile={profile} setUserProfile={setProfile}/>
-      )}
-      {currentTab === "postProfile" && (
-        <ProfileUpdateCard session={session} postUser={postUser}/>
-      )}
-      {currentTab === "advancedControls" && (
-        <AdvancedControls />
-      )}
-      {currentTab === "subscribe" && (
-        <UserTopicSubscribe />
-      )}
-    </div>
+        <Navbar session={session} status={status} tab={currentTab} ChangeTab={setCurrentTab} />
+        {currentTab === "my-posts" && (
+          <MyPostsPage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} />
+        )}
+        {currentTab === "home" && (
+          <HomePage session={session} jobRequests={jobRequests} jobOpenings={jobOpenings} ChangeTab={setCurrentTab} ChangeProfile={setPostUser} />
+        )}
+        {currentTab === "admin" && (
+          <AdminDashboard jobRequests={jobRequests} jobOpenings={jobOpenings} />
+        )}
+        {currentTab === "postOpening" && (
+          <PostJobOpeningPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
+        )}
+        {currentTab === "postRequest" && (
+          <PostJobRequestPage session={session} ChangeTab={setCurrentTab} postUser={setPostUser} />
+        )}
+        {currentTab === "generalChat" && (
+          <GeneralChat session={session} messages={messages} />
+        )}
+        {currentTab === "profile" && (
+          <ProfileUpdateCard session={session} userProfile={profile} setUserProfile={setProfile} />
+        )}
+        {currentTab === "postProfile" && (
+          <ProfileUpdateCard session={session} postUser={postUser} />
+        )}
+        {currentTab === "advancedControls" && (
+          <AdvancedControls />
+        )}
+        {currentTab === "subscribe" && (
+          <UserTopicSubscribe />
+        )}
+      </div></>
   );
 }
