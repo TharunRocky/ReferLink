@@ -86,7 +86,7 @@ export default function Navbar() {
                 Home
               </a>
 
-              <a href="/howItWorks" onClick={() => setOpen(false)} className="text-slate-700">
+              <a href="/how-it-works" onClick={() => setOpen(false)} className="text-slate-700">
                 How it Works
               </a>
 
