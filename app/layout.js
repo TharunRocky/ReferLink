@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
 import { SessionProviderWrapper } from './providers';
-import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,7 +48,6 @@ export default function RootLayout({ children }) {
         <SessionProviderWrapper>
           <ServiceWorkerRegister /> 
           {children}
-          <Analytics />
           <Toaster position="top-right" richColors />
         </SessionProviderWrapper>
       </body>

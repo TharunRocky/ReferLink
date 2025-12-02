@@ -42,11 +42,11 @@ export default function SendNotifications() {
             <SelectValue placeholder="Select a topic" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="news">News</SelectItem>
-            <SelectItem value="offers">Offers</SelectItem>
-            <SelectItem value="alerts">Alerts</SelectItem>
-            <SelectItem value="jobRequests">Job Requests</SelectItem>
-            <SelectItem value="jobOpenings">Job Openings</SelectItem>
+            <SelectItem value="News">News</SelectItem>
+            <SelectItem value="Offers">Offers</SelectItem>
+            <SelectItem value="Alerts">Alerts</SelectItem>
+            <SelectItem value="JobRequests">Job Requests</SelectItem>
+            <SelectItem value="JobOpenings">Job Openings</SelectItem>
           </SelectContent>
         </Select>
 
