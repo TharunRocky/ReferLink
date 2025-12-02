@@ -61,7 +61,7 @@ export default function PostJobRequestPage({session, ChangeTab}) {
       const name=session.user.name.split(" ")[0];
       //Notify all subscribed users
       await sendTopicNotification({
-          topic: "jobRequests",
+          topic: "JobRequests",
           title: `${name} posted a New Job Request!`,
           content: `${formData.title}\n${formData.description}\n`,
       });
