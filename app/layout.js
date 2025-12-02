@@ -13,8 +13,8 @@ export const metadata = {
   manifest: "/manifest.json",
   theme_color: "#000000",
   icons: {
-    icon : "/icons/favicon.ico",
-    shortcut : "icons/favicon.ico",
+    icon : "/favicon.ico",
+    shortcut : "/favicon.ico",
     apple: "/icons/apple-touch-icon.png",
   }
 };
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/icons/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
