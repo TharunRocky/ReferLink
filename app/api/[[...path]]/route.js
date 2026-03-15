@@ -86,7 +86,7 @@ export async function POST(request, { params }) {
         company,
         bio: bio || '',
         role: 'USER',
-        status: 'PENDING',
+        status: 'APPROVED',
         approvedBy:'',
         createdAt: new Date().toISOString(),
       };
