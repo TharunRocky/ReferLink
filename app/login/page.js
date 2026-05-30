@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
 import Navbar from "@/components/ui/HomeNavbar";
+import { sendTopicNotification } from "@/lib/sendTopicMessages";
 
 export default function LoginPage() {
    const { data: session, status } = useSession();
@@ -97,6 +98,11 @@ export default function LoginPage() {
 
       if (res.ok) {
         toast.success("Join request submitted! Please login to see your status.");
+        await sendTopicNotification({
+          topic: "Alerts",
+          title: `${signupData.fullName} Joined!`,
+          content: `${signupData.company}\n${signupData.bio}\n`,
+      });
         setSignupData({
           fullName: "",
           email: "",
